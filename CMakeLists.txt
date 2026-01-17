@@ -8,7 +8,16 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_executable(DMPS main.cpp
     resources/.gitkeep
     src/.gitkeep
-    docs/.gitkeep)
+    docs/.gitkeep
+    src/module/IModule.hpp
+    src/engine/IEngine.hpp
+    src/data/IData.hpp
+    src/engine/Engine.hpp src/engine/Engine.cpp
+    src/data/TextData.hpp src/data/TextData.cpp
+    src/module/TextLengthModule.hpp src/module/TextLengthModule.cpp
+    src/core/ModuleResult.hpp
+    src/core/DataType.hpp
+    src/core/ModuleError.hpp)
 
 include(GNUInstallDirs)
 install(TARGETS DMPS

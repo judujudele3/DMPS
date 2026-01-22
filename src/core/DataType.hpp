@@ -4,7 +4,7 @@
 enum class DataType {
     Text,
     Image,
-    Csv // changement avec Tabular
+    Tabular // changement avec Tabular
 };
 
 #endif // DATATYPE_HPP

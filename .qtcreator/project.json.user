@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 18.0.1, 2026-01-20T00:45:58. -->
+<!-- Written by QtCreator 18.0.1, 2026-01-21T21:20:34. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -117,7 +117,7 @@
     <value type="int" key="ProjectExplorer.BuildConfiguration.BuildStepListCount">2</value>
     <value type="bool" key="ProjectExplorer.BuildConfiguration.ClearSystemEnvironment">false</value>
     <valuelist type="QVariantList" key="ProjectExplorer.BuildConfiguration.CustomParsers"/>
-    <value type="bool" key="ProjectExplorer.BuildConfiguration.ParseStandardOutput">false</value>
+    <value type="bool" key="ProjectExplorer.BuildConfiguration.ParseStandardOutput">true</value>
     <valuelist type="QVariantList" key="ProjectExplorer.BuildConfiguration.UserEnvironmentChanges"/>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Défaut</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">WorkspaceProject.BuildConfiguration</value>

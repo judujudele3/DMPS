@@ -1,4 +1,4 @@
-#include "WordCountModule.hpp"
+#include "TextWordCountModule.hpp"
 #include <cctype>
 
 std::string WordCountModule::getName() const {
@@ -32,5 +32,6 @@ ModuleResult WordCountModule::apply(IData& data) {
     if (inWord) words++;
 
     res.message = "Word count = " + std::to_string(words);
+    res.set("WordCount",words);
     return res;
 }

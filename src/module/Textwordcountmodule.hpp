@@ -1,5 +1,5 @@
-#ifndef WORDCOUNTMODULE_HPP
-#define WORDCOUNTMODULE_HPP
+#ifndef TEXTWORDCOUNTMODULE_H
+#define TEXTWORDCOUNTMODULE_H
 
 #include <string>
 #include "IModule.hpp"

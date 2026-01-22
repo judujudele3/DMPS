@@ -23,3 +23,7 @@ private:
 };
 
 #endif
+
+// explicit empeche les conversions implicites
+/*   règle d'or  */
+//Tout constructeur à un seul argument → explicit

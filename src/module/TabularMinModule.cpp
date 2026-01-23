@@ -33,7 +33,7 @@ ModuleResult TabularMinModule::apply(IData& data) {
         } catch (...) { continue; }
     }
 
-    res.set(m_colName + "_min", minVal);
+    res.set("min", minVal);
     res.message = "Min computed for column: " + m_colName;
     return res;
 }

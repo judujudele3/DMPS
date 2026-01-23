@@ -33,7 +33,7 @@ ModuleResult TabularMaxModule::apply(IData& data) {
         } catch (...) { continue; }
     }
 
-    res.set(m_colName + "_max", maxVal);
+    res.set("max", maxVal);
     res.message = "Max computed for column: " + m_colName;
     return res;
 }

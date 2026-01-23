@@ -43,7 +43,7 @@ ModuleResult TabularMedianModule::apply(IData& data) {
     size_t n = values.size();
     double median = (n % 2 == 0) ? (values[n/2 -1] + values[n/2]) / 2.0 : values[n/2];
 
-    res.set(m_colName + "_median", median);
+    res.set("median", median);
     res.message = "Median computed for column: " + m_colName;
     return res;
 }

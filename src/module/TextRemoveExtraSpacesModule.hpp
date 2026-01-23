@@ -1,12 +1,10 @@
-#ifndef TEXTWORDCOUNTMODULE_H
-#define TEXTWORDCOUNTMODULE_H
+#ifndef TEXTREMOVEEXTRASPACESMODULE_HPP
+#define TEXTREMOVEEXTRASPACESMODULE_HPP
 
-#include <string>
 #include "IModule.hpp"
-#include "../data/IData.hpp"
 #include "../data/TextData.hpp"
 
-class TextWordCountModule : public IModule {
+class TextRemoveExtraSpacesModule : public IModule {
 public:
     std::string getName() const override;
     ModuleResult apply(IData& data) override;

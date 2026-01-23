@@ -30,7 +30,7 @@ ModuleResult TabularCountModule::apply(IData& data) {
         if (!val.empty()) count++;
     }
 
-    res.set(m_colName + "_count", count);
+    res.set("count", count);
     res.message = "Count computed for column: " + m_colName;
     return res;
 }

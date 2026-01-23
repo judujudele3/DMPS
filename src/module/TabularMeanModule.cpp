@@ -30,15 +30,15 @@ ModuleResult TabularMeanModule::apply(IData& data) {
     // Réutiliser Sum et Count
     TabularSumModule sumModule(m_colName);
     ModuleResult sumRes = sumModule.apply(data);
-    double sum = sumRes.get<double>(m_colName + "_sum");
+    double sum = sumRes.get<double>("sum");
 
     TabularCountModule countModule(m_colName);
     ModuleResult countRes = countModule.apply(data);
-    int count = countRes.get<int>(m_colName + "_count");
+    int count = countRes.get<int>("count");
 
     double mean = (count != 0) ? sum / count : 0.0;
 
-    res.set(m_colName + "_mean", mean);
+    res.set("mean", mean);
     res.message = "Mean computed for column: " + m_colName;
     return res;
 }

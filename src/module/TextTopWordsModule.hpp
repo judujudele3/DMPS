@@ -1,0 +1,19 @@
+#ifndef TEXTTOPWORDSMODULE_HPP
+#define TEXTTOPWORDSMODULE_HPP
+
+#include "IModule.hpp"
+#include "../data/TextData.hpp"
+#include <vector>
+#include <string>
+
+class TextTopWordsModule : public IModule {
+public:
+    TextTopWordsModule(int topK = 5) : m_topK(topK) {}
+    std::string getName() const override { return "Text Top Words Module"; }
+    ModuleResult apply(IData& data) override;
+
+private:
+    int m_topK;
+};
+
+#endif

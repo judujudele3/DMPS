@@ -1,6 +1,12 @@
 #include "Engine.hpp"
 #include "../module/IModule.hpp"
+#include "../dataLoader/TextDataLoader.hpp"
 
+Engine::Engine()
+{
+    // Ajouter les loaders disponibles
+    m_loaderManager.addLoader(std::make_shared<TextDataLoader>());
+}
 
 void Engine::setData(std::shared_ptr<IData> data) {
     m_data = data;
@@ -38,4 +44,15 @@ ModuleResult Engine::applyModules() {
 
 std::shared_ptr<IData> Engine::getData() const {
     return m_data;
+}
+
+std::shared_ptr<IData> Engine::loadData(const std::string& path)
+{
+    auto data = m_loaderManager.loadData(path);
+    if (data)
+    {
+        m_data = data;
+        std::cout << "[Engine] Données chargées avec succès." << std::endl;
+    }
+    return data;
 }

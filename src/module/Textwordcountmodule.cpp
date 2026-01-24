@@ -1,11 +1,11 @@
 #include "TextWordCountModule.hpp"
 #include <cctype>
 
-std::string WordCountModule::getName() const {
+std::string TextWordCountModule::getName() const {
     return "Word Count Module";
 }
 
-ModuleResult WordCountModule::apply(IData& data) {
+ModuleResult TextWordCountModule::apply(IData& data) {
     ModuleResult res;
 
     if (data.type() != DataType::Text) {

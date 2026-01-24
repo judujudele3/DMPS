@@ -11,6 +11,7 @@
 // Définition du type générique pour les valeurs
 using ResultValue = std::variant<
     int,
+    size_t,
     double,
     std::string,
     bool,

@@ -1,12 +1,11 @@
-#ifndef TEXTWORDCOUNTMODULE_H
-#define TEXTWORDCOUNTMODULE_H
+#ifndef TEXTLANGUAGEDETECTIONMODULE_HPP
+#define TEXTLANGUAGEDETECTIONMODULE_HPP
 
-#include <string>
 #include "IModule.hpp"
-#include "../data/IData.hpp"
 #include "../data/TextData.hpp"
+#include <string>
 
-class TextWordCountModule : public IModule {
+class TextLanguageDetectionModule : public IModule {
 public:
     std::string getName() const override;
     ModuleResult apply(IData& data) override;

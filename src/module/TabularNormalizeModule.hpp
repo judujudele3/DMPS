@@ -2,7 +2,7 @@
 #define TABULARNORMALIZEMODULE_HPP
 
 #include "IModule.hpp"
-#include "../data/tabulardata.hpp"
+#include "../data/TabularData.hpp"
 
 class TabularNormalizeModule : public IModule {
 public:

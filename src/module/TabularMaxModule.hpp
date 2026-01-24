@@ -2,7 +2,7 @@
 #define TABULARMAXMODULE_HPP
 
 #include "IModule.hpp"
-#include "../data/tabulardata.hpp"
+#include "../data/TabularData.hpp"
 #include <string>
 
 class TabularMaxModule : public IModule {

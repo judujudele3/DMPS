@@ -27,7 +27,7 @@ ModuleResult TabularStdModule::apply(IData& data) {
 
     TabularMeanModule meanModule(m_colName);
     ModuleResult meanRes = meanModule.apply(data);
-    double mean = meanRes.get<double>(m_colName + "_mean");
+    double mean = meanRes.get<double>("mean");
 
     double variance = 0.0;
     int validCount = 0;
@@ -45,7 +45,7 @@ ModuleResult TabularStdModule::apply(IData& data) {
 
     double stddev = (validCount > 0) ? std::sqrt(variance / validCount) : 0.0;
 
-    res.set(m_colName + "_std", stddev);
+    res.set("std", stddev);
     res.message = "Standard deviation computed for column: " + m_colName;
     return res;
 }

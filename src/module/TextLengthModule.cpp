@@ -17,6 +17,7 @@ ModuleResult TextLengthModule::apply(IData& data) {
     TextData& text = dynamic_cast<TextData&>(data);
 
     // Valeur d'information : longueur du texte
+    res.set("ContentLength", static_cast<int>(text.getContent().size()));
     res.message = "Content length = " + std::to_string(text.getContent().size()) + " characters.";
 
     return res;

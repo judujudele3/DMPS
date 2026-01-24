@@ -51,7 +51,7 @@ ModuleResult TabularSumModule::apply(IData& data) {
 
     // Résultat
     res.set("column", m_columnName);
-    res.set("sum", sum);
+    res.set( "sum", sum);
     res.set("count", static_cast<int>(count));
 
     res.message = "Sum computed successfully";

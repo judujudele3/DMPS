@@ -2,7 +2,7 @@
 #define TABULARCOUNTMODULE_HPP
 
 #include "IModule.hpp"
-#include "../data/tabulardata.hpp"
+#include "../data/TabularData.hpp"
 #include <string>
 
 class TabularCountModule : public IModule {

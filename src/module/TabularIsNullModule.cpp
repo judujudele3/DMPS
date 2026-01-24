@@ -30,7 +30,7 @@ ModuleResult TabularIsNullModule::apply(IData& data) {
         if (val.empty()) nullCount++;
     }
 
-    res.set(m_colName + "_isnull", nullCount);
+    res.set("isnull", nullCount);
     res.message = "Null values counted for column: " + m_colName;
     return res;
 }

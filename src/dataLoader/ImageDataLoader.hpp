@@ -1,16 +1,17 @@
-#ifndef TEXTDATALOADER_HPP
-#define TEXTDATALOADER_HPP
+#ifndef IMAGEDATALOADER_HPP
+#define IMAGEDATALOADER_HPP
 
-#pragma once
 #include "IDataLoader.hpp"
+#include "../data/ImageData.hpp"
+#include <memory>
+#include <string>
 
-class TextDataLoader : public IDataLoader
-{
+class ImageDataLoader : public IDataLoader {
 public:
     bool supports(const std::string& extension) const override;
     std::shared_ptr<IData> load(const std::string& path) override;
     std::string getExtension(const std::string& path) const override;
 };
 
+#endif // IMAGEDATALOADER_HPP
 
-#endif // TEXTDATALOADER_HPP

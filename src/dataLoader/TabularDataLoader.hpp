@@ -1,16 +1,16 @@
-#ifndef TEXTDATALOADER_HPP
-#define TEXTDATALOADER_HPP
+#ifndef TABULARDATALOADER_HPP
+#define TABULARDATALOADER_HPP
 
-#pragma once
 #include "IDataLoader.hpp"
+#include "../data/TabularData.hpp"
+#include <memory>
+#include <string>
 
-class TextDataLoader : public IDataLoader
-{
+class TabularDataLoader : public IDataLoader {
 public:
     bool supports(const std::string& extension) const override;
     std::shared_ptr<IData> load(const std::string& path) override;
     std::string getExtension(const std::string& path) const override;
 };
 
-
-#endif // TEXTDATALOADER_HPP
+#endif // TABULARDATALOADER_HPP

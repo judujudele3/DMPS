@@ -19,11 +19,15 @@ else()
 endif()
 
 find_package(OpenCV REQUIRED)
+include_directories(include)
 
 file(GLOB_RECURSE SOURCES
     "src/*.cpp"
     "src/*.hpp"
     "src/*.ui"
+    "src/include/stb_image.h"
+    "src/test_data/*.jpeg"
+    "src/test_data/*.csv"
 )
 add_executable(DMPS main.cpp ${SOURCES})
 

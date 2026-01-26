@@ -22,74 +22,102 @@ int main(int argc, char *argv[])
 
     w.show();
     return a.exec();
-}*/
-#include <iostream>
-#include <chrono>
-#include <iostream>
-#include <vector>
-#include<random>
-#include "src/module/ImageBlurModule.hpp"
-#include "src/module/ImageFlipModule.hpp"
-#include "src/module/ImageInvertColorsModule.hpp"
-#include "src/module/ImageResizeModule.hpp"
-#include "src/module/ImageColorHistogramModule.hpp"
-
-void fillRandom(ImageData& img) {
-    std::mt19937 gen(42);
-    std::uniform_int_distribution<int> dist(0, 255);
-
-    for (int y = 0; y < img.getHeight(); ++y) {
-        for (int x = 0; x < img.getWidth(); ++x) {
-            Pixel& p = img.at(x, y);
-            p.r = dist(gen);
-            p.g = dist(gen);
-            p.b = dist(gen);
-            p.a = 255;
-        }
-    }
 }
+#include "src/dataloader/ImageDataLoader.hpp"
+#include <iostream>
+#include <memory>
 
 int main() {
-    const int width = 256;
-    const int height = 256;
+    ImageDataLoader loader;
 
-    ImageData img(width, height, ImageFormat::JPG);
-    fillRandom(img);
+    // 🔹 Chemin vers l'image de test
+    std::string path = "C:/Users/user/Desktop/dossier_c/DMPS/src/test_data/test.jpeg"; // Remplace par ton image
 
+    // Vérifier si le loader supporte l'extension
+    std::string ext = loader.getExtension(path);
+    if (!loader.supports(ext)) {
+        std::cerr << "Format non supporté : " << ext << std::endl;
+        return 1;
+    }
 
-    // 🔹 Color Histogram
-    ImageColorHistogramModule histModule;
-    ModuleResult histRes = histModule.apply(img);
-    std::cout << histRes.message << "\n";
-    // Affiche un échantillon de l'histogramme rouge
+    // Charger l'image
+    std::shared_ptr<IData> data = loader.load(path);
+    if (!data) {
+        std::cerr << "Échec du chargement de l'image." << std::endl;
+        return 1;
+    }
 
-    auto histR = histRes.get<std::vector<size_t>>("HistR");
-    std::cout << "HistR sample: ";
-    for (int i = 0; i < 10; ++i) std::cout << histR[i] << " ";
-    std::cout << "...\n";
+    // Vérifier que c'est bien un ImageData
+    auto* image = dynamic_cast<ImageData*>(data.get());
+    if (!image) {
+        std::cerr << "Erreur: IData n'est pas une ImageData." << std::endl;
+        return 1;
+    }
 
-    // 🔹 Blur
-    ImageBlurModule blurModule;
-    ModuleResult blurRes = blurModule.apply(img);
-    std::cout << blurRes.message << "\n";
-
-    // 🔹 Flip Horizontal
-    ImageFlipModule flipModule(FlipType::Horizontal);
-    ModuleResult flipRes = flipModule.apply(img);
-    std::cout << flipRes.message << "\n";
-
-    // 🔹 Invert Colors
-    ImageInvertColorsModule invertModule;
-    ModuleResult invertRes = invertModule.apply(img);
-    std::cout << invertRes.message << "\n";
-
-    // 🔹 Resize
-    ImageResizeModule resizeModule(128, 128); // réduire
-    ModuleResult resizeRes = resizeModule.apply(img);
-    std::cout << resizeRes.message << "\n";
-    std::cout << "New size: " << img.getWidth() << "x" << img.getHeight() << "\n";
+    // Afficher des informations basiques
+    std::cout << "Image loaded: " << image->getWidth()
+              << "x" << image->getHeight()  << std::endl;
 
 
+    // Afficher les 5 premiers pixels pour vérification
+    std::cout << "Premiers pixels: ";
+    for (int i = 0; i < std::min(5, (int)image->pixels().size()); ++i) {
+        Pixel& p = image->pixels()[i];
+        std::cout << "(" << (int)p.r << "," << (int)p.g << "," << (int)p.b << "," << (int)p.a << ") ";
+    }
+    std::cout << std::endl;
+    std::cout<< "the pixel (5,5): \n"<<"a: "<<(int)image->at(5,5).a<<"\nb: "<<(int)image->at(5,5).b<<"\ng: "<<(int)image->at(5,5).g<<"\nr: "<<(int)image->at(5,5).r<<std::endl;
+    return 0;
+}
+*/
+
+
+#include "src/dataLoader/TabularDataLoader.hpp"
+#include <iostream>
+#include <memory>
+
+int main() {
+    TabularDataLoader loader;
+
+    // 🔹 Chemin vers le fichier CSV de test
+    std::string path = "C:/Users/user/Desktop/dossier_c/DMPS/src/test_data/sales.csv"; // remplace par ton fichier
+
+    // Vérifier si le loader supporte l'extension
+    std::string ext = path.substr(path.find_last_of('.') + 1);
+    if (!loader.supports(ext)) {
+        std::cerr << "Format non supporté : " << ext << std::endl;
+        return 1;
+    }
+
+    // Charger le CSV
+    std::shared_ptr<IData> data = loader.load(path);
+    if (!data) {
+        std::cerr << "Échec du chargement du CSV." << std::endl;
+        return 1;
+    }
+
+    // Vérifier que c'est bien un TabularData
+    auto* table = dynamic_cast<TabularData*>(data.get());
+    if (!table) {
+        std::cerr << "Erreur: IData n'est pas un TabularData." << std::endl;
+        return 1;
+    }
+
+    // Afficher le header
+    std::cout << "Header: ";
+    for (const auto& col : table->header()) std::cout << col << " ";
+    std::cout << std::endl;
+
+    // Afficher les 5 premières lignes
+    std::cout << "Premières lignes:" << std::endl;
+    int n = std::min(5, (int)table->rowCount());
+    for (int i = 0; i < n; ++i) {
+        const auto& row = table->rows()[i];
+        for (const auto& cell : row) std::cout << cell << " ";
+        std::cout << std::endl;
+    }
 
     return 0;
 }
+
+

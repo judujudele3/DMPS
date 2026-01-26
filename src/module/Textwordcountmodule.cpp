@@ -18,7 +18,7 @@ ModuleResult TextWordCountModule::apply(IData& data) {
     TextData& text = dynamic_cast<TextData&>(data);
     const std::string& content = text.getContent();
 
-    size_t words = 0;
+    int words = 0;
     bool inWord = false;
 
     for (char c : content) {

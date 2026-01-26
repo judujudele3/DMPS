@@ -6,15 +6,18 @@
 #include <iostream>
 #include <unordered_map>
 #include <variant>
+#include <cstdint>
 #include "ModuleError.hpp"
 
 // Définition du type générique pour les valeurs
 using ResultValue = std::variant<
     int,
-    size_t,
+    uint8_t,
+    uint64_t,
     double,
     std::string,
     bool,
+    std::vector<size_t>,
     std::vector<double>,
     std::vector<std::string>
     //std::shared_ptr<ImageData>

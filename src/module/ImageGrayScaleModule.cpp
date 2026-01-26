@@ -1,10 +1,10 @@
-#include "GrayScaleModule.hpp"
+#include "ImageGrayScaleModule.hpp"
 
-std::string GrayScaleModule::getName() const {
+std::string ImageGrayScaleModule::getName() const {
     return "GrayScaleModule";
 }
 
-ModuleResult GrayScaleModule::apply(IData& data) {
+ModuleResult ImageGrayScaleModule::apply(IData& data) {
     ModuleResult result;
 
     // Vérification du type logique

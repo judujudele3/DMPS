@@ -5,6 +5,7 @@
 #include <memory>
 #include <QApplication>
 #include"src/data/ImageData.hpp"
+#include <cstdint>
 /*
 int main(int argc, char *argv[])
 {
@@ -22,43 +23,73 @@ int main(int argc, char *argv[])
     w.show();
     return a.exec();
 }*/
-
-
 #include <iostream>
-#include "src/module/GrayScaleModule.hpp"
+#include <chrono>
+#include <iostream>
+#include <vector>
+#include<random>
+#include "src/module/ImageBlurModule.hpp"
+#include "src/module/ImageFlipModule.hpp"
+#include "src/module/ImageInvertColorsModule.hpp"
+#include "src/module/ImageResizeModule.hpp"
+#include "src/module/ImageColorHistogramModule.hpp"
 
-int main() {
-    //  Création d'une petite image 3x2 pour tester facilement
-    ImageData img(3, 2, ImageFormat::JPG);
+void fillRandom(ImageData& img) {
+    std::mt19937 gen(42);
+    std::uniform_int_distribution<int> dist(0, 255);
 
-    // Remplir l'image avec des couleurs connues
-    img.at(0, 0) = {255, 0, 0, 255}; // rouge
-    img.at(1, 0) = {0, 255, 0, 128}; // vert semi-transparent
-    img.at(2, 0) = {0, 0, 255, 255}; // bleu
-    img.at(0, 1) = {100, 50, 25, 200};
-    img.at(1, 1) = {200, 200, 200, 255};
-    img.at(2, 1) = {10, 20, 30, 100};
-
-    //  Appliquer le module GrayScale
-    GrayScaleModule grayModule;
-    ModuleResult res = grayModule.apply(img);
-
-    // Vérifier le résultat
-    std::cout << res.message << "\n";
-
-    // Afficher les pixels après conversion
     for (int y = 0; y < img.getHeight(); ++y) {
         for (int x = 0; x < img.getWidth(); ++x) {
             Pixel& p = img.at(x, y);
-            std::cout << "("
-                      << (int)p.r << ","
-                      << (int)p.g << ","
-                      << (int)p.b << ","
-                      << (int)p.a << ") ";
+            p.r = dist(gen);
+            p.g = dist(gen);
+            p.b = dist(gen);
+            p.a = 255;
         }
-        std::cout << "\n";
     }
+}
+
+int main() {
+    const int width = 256;
+    const int height = 256;
+
+    ImageData img(width, height, ImageFormat::JPG);
+    fillRandom(img);
+
+
+    // 🔹 Color Histogram
+    ImageColorHistogramModule histModule;
+    ModuleResult histRes = histModule.apply(img);
+    std::cout << histRes.message << "\n";
+    // Affiche un échantillon de l'histogramme rouge
+
+    auto histR = histRes.get<std::vector<size_t>>("HistR");
+    std::cout << "HistR sample: ";
+    for (int i = 0; i < 10; ++i) std::cout << histR[i] << " ";
+    std::cout << "...\n";
+
+    // 🔹 Blur
+    ImageBlurModule blurModule;
+    ModuleResult blurRes = blurModule.apply(img);
+    std::cout << blurRes.message << "\n";
+
+    // 🔹 Flip Horizontal
+    ImageFlipModule flipModule(FlipType::Horizontal);
+    ModuleResult flipRes = flipModule.apply(img);
+    std::cout << flipRes.message << "\n";
+
+    // 🔹 Invert Colors
+    ImageInvertColorsModule invertModule;
+    ModuleResult invertRes = invertModule.apply(img);
+    std::cout << invertRes.message << "\n";
+
+    // 🔹 Resize
+    ImageResizeModule resizeModule(128, 128); // réduire
+    ModuleResult resizeRes = resizeModule.apply(img);
+    std::cout << resizeRes.message << "\n";
+    std::cout << "New size: " << img.getWidth() << "x" << img.getHeight() << "\n";
+
+
 
     return 0;
 }
-

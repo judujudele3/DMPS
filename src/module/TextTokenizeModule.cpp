@@ -1,6 +1,10 @@
 #include "TextTokenizeModule.hpp"
 #include <sstream>
 
+std::string TextTokenizeModule::getName() const { return "Text Tokenize Module"; }
+
+
+
 ModuleResult TextTokenizeModule::apply(IData& data) {
     ModuleResult res;
 

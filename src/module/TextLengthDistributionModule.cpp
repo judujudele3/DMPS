@@ -1,6 +1,10 @@
 #include "TextLengthDistributionModule.hpp"
 #include <sstream>
 
+
+std::string TextLengthDistributionModule::getName() const  { return "Text Length Distribution"; }
+
+
 ModuleResult TextLengthDistributionModule::apply(IData& data) {
     ModuleResult res;
 

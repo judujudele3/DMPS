@@ -3,6 +3,9 @@
 #include <unordered_map>
 #include <algorithm>
 
+
+std::string TextTopWordsModule::getName() const { return "Text Top Words Module"; }
+
 ModuleResult TextTopWordsModule::apply(IData& data) {
     ModuleResult res;
 

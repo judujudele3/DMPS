@@ -17,6 +17,7 @@ using ResultValue = std::variant<
     bool,
     std::vector<double>,
     std::vector<std::string>
+    //std::shared_ptr<ImageData>
     >;
 
 struct ModuleResult {

@@ -60,7 +60,7 @@ long long measureTime(int nCols, int nRows) {
 
     return duration.count(); // temps en millisecondes
 }
-
+/*
 int main() {
     // Liste de datasets à tester : {colonnes, lignes}
     std::vector<std::pair<int,int>> tests = {
@@ -78,3 +78,4 @@ int main() {
 
     return 0;
 }
+*/

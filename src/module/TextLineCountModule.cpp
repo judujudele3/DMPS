@@ -1,6 +1,12 @@
 #include "TextLineCountModule.hpp"
 #include <algorithm>
 
+
+std::string TextLineCountModule::getName() const  {
+    return "Text Line Count";
+}
+
+
 ModuleResult TextLineCountModule::apply(IData& data) {
     ModuleResult result;
 

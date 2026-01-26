@@ -18,40 +18,21 @@ else()
     set(QT_VERSION_MAJOR 6)
 endif()
 
-add_executable(DMPS
-    main.cpp
-    resources/.gitkeep
-    src/.gitkeep
-    docs/.gitkeep
-    src/module/IModule.hpp
-    src/engine/IEngine.hpp
-    src/data/IData.hpp
-    src/engine/Engine.hpp
-    src/engine/Engine.cpp
-    src/data/TextData.hpp
-    src/data/TextData.cpp
-    src/module/TextLengthModule.hpp
-    src/module/TextLengthModule.cpp
-    src/core/ModuleResult.hpp
-    src/core/DataType.hpp
-    src/core/ModuleError.hpp
-    src/ui/MainWindow.hpp
-    src/ui/MainWindow.cpp
-    src/ui/MainWindow.ui
-    src/controller/Controller.hpp src/controller/Controller.cpp
-    src/dataLoaderManager/DataLoaderManager.hpp src/dataLoaderManager/DataLoaderManager.cpp
-    src/dataLoader/IDataLoader.hpp
-    src/dataLoader/TextDataLoader.cpp
-    src/dataLoader/TextDataLoader.hpp
-    src/ui/display/IDisplayAdapter.hpp
-    src/ui/display/TextDisplayAdapter.hpp src/ui/display/TextDisplayAdapter.cpp
+find_package(OpenCV REQUIRED)
+
+file(GLOB_RECURSE SOURCES
+    "src/*.cpp"
+    "src/*.hpp"
+    "src/*.ui"
 )
+add_executable(DMPS main.cpp ${SOURCES})
 
 # AJOUT : Lier les bibliothèques Qt
 target_link_libraries(DMPS PRIVATE
     Qt${QT_VERSION_MAJOR}::Core
     Qt${QT_VERSION_MAJOR}::Gui
     Qt${QT_VERSION_MAJOR}::Widgets
+    ${OpenCV_LIBS}
 )
 
 include(GNUInstallDirs)

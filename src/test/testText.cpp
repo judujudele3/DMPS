@@ -16,7 +16,7 @@
 #include "../module/TextLengthDistributionModule.hpp"
 #include "../module/TextTopWordsModule.hpp"
 #include "../module/TextLanguageDetectionModule.hpp"
-
+/*
 int main() {
 
     std::string sampleText =
@@ -64,7 +64,7 @@ int main() {
 
     /* =======================
        Affichage résultats
-       ======================= */
+       =======================
        std::cout << langModule.getName()
           << ": " << r8.get<std::string>("Language") << std::endl;
           
@@ -96,3 +96,4 @@ int main() {
 
     return 0;
 }
+*/

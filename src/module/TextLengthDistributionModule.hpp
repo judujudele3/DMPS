@@ -7,7 +7,7 @@
 
 class TextLengthDistributionModule : public IModule {
 public:
-    std::string getName() const override { return "Text Length Distribution"; }
+    std::string getName() const override;
     ModuleResult apply(IData& data) override;
 };
 

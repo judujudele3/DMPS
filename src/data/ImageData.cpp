@@ -33,3 +33,8 @@ Pixel& ImageData::at(int x, int y) {
 const Pixel& ImageData::at(int x, int y) const {
     return m_pixels[y * m_width + x];
 }
+
+//pour accèder au pixels
+std::vector<Pixel>& ImageData::pixels() { return m_pixels; }
+const std::vector<Pixel>& ImageData::pixels() const { return m_pixels; }
+

@@ -58,3 +58,9 @@ ModuleResult TabularSumModule::apply(IData& data) {
 
     return res;
 }
+
+std::vector<ModuleParameter> TabularSumModule::getParameterDescriptors() {
+    return {
+        {"columnName", "string", std::string(""), "Nom de la colonne à sommer"}
+    };
+}

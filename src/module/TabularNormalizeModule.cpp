@@ -38,3 +38,9 @@ ModuleResult TabularNormalizeModule::apply(IData& data) {
     res.message = "Normalized numeric columns.";
     return res;
 }
+
+
+std::vector<ModuleParameter> TabularNormalizeModule::getParameterDescriptors() {
+    return {
+    };
+}

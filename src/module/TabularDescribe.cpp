@@ -89,3 +89,8 @@ ModuleResult TabularDescribe::apply(IData& data) {
     res.message = "Summary computed for numeric columns (Optimized + Multithreaded).";
     return res;
 }
+
+
+std::vector<ModuleParameter> TabularDescribe::getParameterDescriptors() {
+    return {}; // Aucun paramètre pour ce module
+}

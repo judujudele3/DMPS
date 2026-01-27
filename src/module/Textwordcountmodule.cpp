@@ -18,7 +18,7 @@ ModuleResult TextWordCountModule::apply(IData& data) {
     TextData& text = dynamic_cast<TextData&>(data);
     const std::string& content = text.getContent();
 
-    size_t words = 0;
+    int words = 0;
     bool inWord = false;
 
     for (char c : content) {
@@ -34,4 +34,9 @@ ModuleResult TextWordCountModule::apply(IData& data) {
     res.message = "Word count = " + std::to_string(words);
     res.set("WordCount",words);
     return res;
+}
+
+
+std::vector<ModuleParameter> TextWordCountModule::getParameterDescriptors() {
+    return {};
 }

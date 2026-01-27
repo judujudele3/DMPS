@@ -49,3 +49,10 @@ ModuleResult TabularStdModule::apply(IData& data) {
     res.message = "Standard deviation computed for column: " + m_colName;
     return res;
 }
+
+
+std::vector<ModuleParameter> TabularStdModule::getParameterDescriptors() {
+    return {
+        {"colName", "string", std::string(""), "Nom de la colonne à traiter"}
+    };
+}

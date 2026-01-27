@@ -31,3 +31,8 @@ ModuleResult TabularFilterNumericColumnsModule::apply(IData& data) {
     res.message = "Kept " + std::to_string(numericCols.size()) + " numeric columns.";
     return res;
 }
+
+
+std::vector<ModuleParameter> TabularFilterNumericColumnsModule::getParameterDescriptors() {
+    return {};
+}

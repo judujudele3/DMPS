@@ -3,6 +3,9 @@
 #include <unordered_map>
 #include <algorithm>
 
+
+std::string TextTopWordsModule::getName() const { return "Text Top Words Module"; }
+
 ModuleResult TextTopWordsModule::apply(IData& data) {
     ModuleResult res;
 
@@ -36,4 +39,11 @@ ModuleResult TextTopWordsModule::apply(IData& data) {
     res.set<std::vector<std::string>>("TopWords", topWords);
     res.message = "Top words computed successfully";
     return res;
+}
+
+
+std::vector<ModuleParameter> TextTopWordsModule::getParameterDescriptors() {
+    return {
+        {"topK", "int", 5, "Nombre de mots les plus fréquents à afficher"}
+    };
 }

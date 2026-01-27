@@ -2,7 +2,7 @@
 #define IENGINE_HPP
 #pragma once
 #include <memory>
-#include "../core/ModuleResult.hpp"
+#include "../core/ModuleExecutionResult.hpp"
 
 class IData;
 class IModule;
@@ -12,8 +12,7 @@ public:
     virtual ~IEngine() = default;
 
     virtual void setData(std::shared_ptr<IData> data) = 0;
-    virtual void addModule(std::shared_ptr<IModule> module) = 0;
-    virtual ModuleResult applyModules() = 0;
+    virtual std::vector<ModuleExecutionResult> applyModules() = 0;
 
 
     virtual std::shared_ptr<IData> getData() const = 0; // récupérer la donnée actuelle

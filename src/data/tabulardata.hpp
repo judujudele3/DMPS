@@ -22,9 +22,11 @@ public:
     const std::vector<std::string>& header() const;
 
     void addRow(const std::vector<std::string>& row);
-    // std::vector<std::vector<std::string>>& rows() const;
+
+    const std::vector<std::vector<std::string>>& rows() const;
     // on a supprimé const pour que on peut travailler sur le tabulardata
-    std::vector<std::vector<std::string>>& rows() ;
+    const std::vector<std::vector<std::string>>& rows() const ;
+    std::vector<std::vector<std::string>>& rows();
     size_t rowCount() const;
     size_t columnCount() const;
 

@@ -1,5 +1,11 @@
 #include "TextCharacterCountModule.hpp"
 
+
+std::string TextCharacterCountModule::getName() const  {
+    return "Text Character Count";
+}
+
+
 ModuleResult TextCharacterCountModule::apply(IData& data) {
     ModuleResult result;
 
@@ -22,4 +28,9 @@ ModuleResult TextCharacterCountModule::apply(IData& data) {
     result.message = "Character count computed successfully";
 
     return result;
+}
+
+
+std::vector<ModuleParameter> TextCharacterCountModule::getParameterDescriptors() {
+    return {};
 }

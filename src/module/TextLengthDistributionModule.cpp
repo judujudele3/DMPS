@@ -1,6 +1,10 @@
 #include "TextLengthDistributionModule.hpp"
 #include <sstream>
 
+
+std::string TextLengthDistributionModule::getName() const  { return "Text Length Distribution"; }
+
+
 ModuleResult TextLengthDistributionModule::apply(IData& data) {
     ModuleResult res;
 
@@ -26,4 +30,9 @@ ModuleResult TextLengthDistributionModule::apply(IData& data) {
     res.set<std::vector<std::string>>("LengthDistribution", histogramStr);
     res.message = "Word length distribution computed successfully";
     return res;
+}
+
+
+std::vector<ModuleParameter> TextLengthDistributionModule::getParameterDescriptors() {
+    return {};
 }

@@ -29,3 +29,8 @@ ModuleResult TextRemoveExtraSpacesModule::apply(IData& data) {
 
     return res;
 }
+
+
+std::vector<ModuleParameter> TextRemoveExtraSpacesModule::getParameterDescriptors() {
+    return {};
+}

@@ -25,10 +25,18 @@ public:
     int getWidth() const;
     int getHeight() const;
 
+    int& getWidth() ;
+    int& getHeight() ;
+
     ImageFormat format() const;
 
     Pixel& at(int x, int y);
     const Pixel& at(int x, int y) const;
+
+    //pour accèder au pixels
+    std::vector<Pixel>& pixels();
+    const std::vector<Pixel>& pixels() const;
+
 
 private:
     int m_width;

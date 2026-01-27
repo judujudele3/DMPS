@@ -1,5 +1,5 @@
 #include "imagedata.hpp"
-
+#include <iostream>
 
 ImageData::ImageData(int width, int height ,ImageFormat format):
     m_width(width),
@@ -11,6 +11,8 @@ ImageData::ImageData(int width, int height ,ImageFormat format):
 
 
 DataType ImageData::type() const {
+    std::cout << "[ImageData] type() called, returning "
+              << static_cast<int>(DataType::Image) << std::endl;
     return DataType::Image;
 }
 
@@ -21,6 +23,16 @@ int ImageData::getWidth() const{
 int ImageData::getHeight() const {
     return m_height;
 }
+
+
+int& ImageData::getWidth() {
+    return m_width;
+}
+
+int& ImageData::getHeight()  {
+    return m_height;
+}
+
 
 ImageFormat ImageData::format() const {
     return m_format;
@@ -33,3 +45,8 @@ Pixel& ImageData::at(int x, int y) {
 const Pixel& ImageData::at(int x, int y) const {
     return m_pixels[y * m_width + x];
 }
+
+//pour accèder au pixels
+std::vector<Pixel>& ImageData::pixels() { return m_pixels; }
+const std::vector<Pixel>& ImageData::pixels() const { return m_pixels; }
+

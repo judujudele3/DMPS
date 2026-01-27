@@ -31,3 +31,10 @@ ModuleResult TabularFillMissingModule::apply(IData& data) {
     res.message = "Filled " + std::to_string(filled) + " missing values in column: " + m_column;
     return res;
 }
+
+std::vector<ModuleParameter> TabularFillMissingModule::getParameterDescriptors() {
+    return {
+        {"column", "string", std::string(""), "Nom de la colonne à remplir"},
+        {"fillValue", "string", std::string("0"), "Valeur de remplissage pour les cases vides"}
+    };
+}

@@ -37,3 +37,8 @@ ModuleResult TextLineCountModule::apply(IData& data) {
     return result;
 }
 
+
+
+std::vector<ModuleParameter> TextLineCountModule::getParameterDescriptors() {
+    return {};
+}

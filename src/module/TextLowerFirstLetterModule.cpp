@@ -32,3 +32,8 @@ ModuleResult TextLowerFirstLetterModule::apply(IData& data) {
 
     return res;
 }
+
+
+std::vector<ModuleParameter> TextLowerFirstLetterModule::getParameterDescriptors() {
+    return {};
+}

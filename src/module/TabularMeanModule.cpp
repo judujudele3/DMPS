@@ -42,3 +42,9 @@ ModuleResult TabularMeanModule::apply(IData& data) {
     res.message = "Mean computed for column: " + m_colName;
     return res;
 }
+
+std::vector<ModuleParameter> TabularMeanModule::getParameterDescriptors() {
+    return {
+        {"colName", "string", std::string(""), "Nom de la colonne pour laquelle calculer la moyenne"}
+    };
+}

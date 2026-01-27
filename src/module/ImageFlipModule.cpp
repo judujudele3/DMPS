@@ -36,3 +36,15 @@ ModuleResult ImageFlipModule::apply(IData& data) {
     result.message = "Image flipped.";
     return result;
 }
+
+std::vector<ModuleParameter>
+ImageFlipModule::getParameterDescriptors() {
+    return {
+        {
+            "type",
+            "string",
+            std::string("Horizontal"),
+            "Type de retournement : Horizontal ou Vertical"
+        }
+    };
+}

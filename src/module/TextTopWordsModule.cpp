@@ -40,3 +40,10 @@ ModuleResult TextTopWordsModule::apply(IData& data) {
     res.message = "Top words computed successfully";
     return res;
 }
+
+
+std::vector<ModuleParameter> TextTopWordsModule::getParameterDescriptors() {
+    return {
+        {"topK", "int", 5, "Nombre de mots les plus fréquents à afficher"}
+    };
+}

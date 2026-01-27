@@ -33,3 +33,8 @@ ModuleResult TabularDropEmptyRowsModule::apply(IData& data) {
     res.message = "Dropped empty rows: " + std::to_string(before - after);
     return res;
 }
+
+
+std::vector<ModuleParameter> TabularDropEmptyRowsModule::getParameterDescriptors() {
+    return {};
+}

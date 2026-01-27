@@ -34,3 +34,10 @@ ModuleResult TabularIsNullModule::apply(IData& data) {
     res.message = "Null values counted for column: " + m_colName;
     return res;
 }
+
+
+std::vector<ModuleParameter> TabularIsNullModule::getParameterDescriptors() {
+    return {
+        {"colName", "string", std::string(""), "Nom de la colonne à vérifier pour les valeurs nulles"}
+    };
+}

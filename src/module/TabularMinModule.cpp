@@ -37,3 +37,10 @@ ModuleResult TabularMinModule::apply(IData& data) {
     res.message = "Min computed for column: " + m_colName;
     return res;
 }
+
+
+std::vector<ModuleParameter> TabularMinModule::getParameterDescriptors() {
+    return {
+        {"colName", "string", std::string(""), "Nom de la colonne pour laquelle calculer le minimum"}
+    };
+}

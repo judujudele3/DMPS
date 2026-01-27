@@ -45,3 +45,8 @@ ModuleResult ImageBrightnessModule::apply(IData& data) {
 
     return result;
 }
+
+std::vector<ModuleParameter>
+ImageBrightnessModule::getParameterDescriptors() {
+    return {};
+}

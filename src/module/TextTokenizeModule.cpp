@@ -25,3 +25,8 @@ ModuleResult TextTokenizeModule::apply(IData& data) {
     res.message = "Text tokenized successfully";
     return res;
 }
+
+
+std::vector<ModuleParameter> TextTokenizeModule::getParameterDescriptors() {
+    return {};
+}

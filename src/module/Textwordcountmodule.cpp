@@ -35,3 +35,8 @@ ModuleResult TextWordCountModule::apply(IData& data) {
     res.set("WordCount",words);
     return res;
 }
+
+
+std::vector<ModuleParameter> TextWordCountModule::getParameterDescriptors() {
+    return {};
+}

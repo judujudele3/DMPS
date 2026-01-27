@@ -45,3 +45,11 @@ ModuleResult ImageRotateModule::apply(IData& data) {
     result.message = "Image rotated.";
     return result;
 }
+
+
+std::vector<ModuleParameter>
+ImageRotateModule::getParameterDescriptors() {
+    return {
+        {"degree", "string", std::string("R90"), "Degré de rotation: R90, R180, R270"}
+    };
+}

@@ -32,3 +32,8 @@ ModuleResult ImageInvertColorsModule::apply(IData& data) {
     result.message = "Image colors inverted.";
     return result;
 }
+
+std::vector<ModuleParameter>
+ImageInvertColorsModule::getParameterDescriptors() {
+    return {}; // Aucun paramètre
+}

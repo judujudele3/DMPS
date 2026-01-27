@@ -31,3 +31,8 @@ ModuleResult TextLengthDistributionModule::apply(IData& data) {
     res.message = "Word length distribution computed successfully";
     return res;
 }
+
+
+std::vector<ModuleParameter> TextLengthDistributionModule::getParameterDescriptors() {
+    return {};
+}

@@ -6,7 +6,7 @@
 #include <QApplication>
 #include"src/data/ImageData.hpp"
 #include <cstdint>
-/*
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
@@ -23,6 +23,7 @@ int main(int argc, char *argv[])
     w.show();
     return a.exec();
 }
+/*
 #include "src/dataloader/ImageDataLoader.hpp"
 #include <iostream>
 #include <memory>
@@ -69,7 +70,7 @@ int main() {
     std::cout<< "the pixel (5,5): \n"<<"a: "<<(int)image->at(5,5).a<<"\nb: "<<(int)image->at(5,5).b<<"\ng: "<<(int)image->at(5,5).g<<"\nr: "<<(int)image->at(5,5).r<<std::endl;
     return 0;
 }
-*/
+
 
 
 #include "src/dataLoader/TabularDataLoader.hpp"
@@ -120,4 +121,4 @@ int main() {
     return 0;
 }
 
-
+*/

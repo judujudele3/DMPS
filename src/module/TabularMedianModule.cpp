@@ -47,3 +47,9 @@ ModuleResult TabularMedianModule::apply(IData& data) {
     res.message = "Median computed for column: " + m_colName;
     return res;
 }
+
+std::vector<ModuleParameter> TabularMedianModule::getParameterDescriptors() {
+    return {
+        {"colName", "string", std::string(""), "Nom de la colonne pour laquelle calculer la médiane"}
+    };
+}

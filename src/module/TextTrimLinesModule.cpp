@@ -38,3 +38,9 @@ ModuleResult TextTrimLinesModule::apply(IData& data) {
 
     return res;
 }
+
+
+
+std::vector<ModuleParameter> TextTrimLinesModule::getParameterDescriptors() {
+    return {};
+}

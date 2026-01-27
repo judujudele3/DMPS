@@ -34,3 +34,10 @@ ModuleResult TabularCountModule::apply(IData& data) {
     res.message = "Count computed for column: " + m_colName;
     return res;
 }
+
+
+std::vector<ModuleParameter> TabularCountModule::getParameterDescriptors() {
+    return {
+        {"colName", "string", std::string(""), "Nom de la colonne à compter"}
+    };
+}

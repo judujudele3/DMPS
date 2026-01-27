@@ -21,3 +21,8 @@ ModuleResult TextLanguageDetectionModule::apply(IData& data) {
     res.message = "Language detected successfully";
     return res;
 }
+
+
+std::vector<ModuleParameter> TextLanguageDetectionModule::getParameterDescriptors() {
+    return {};
+}

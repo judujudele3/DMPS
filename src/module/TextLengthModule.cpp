@@ -22,3 +22,8 @@ ModuleResult TextLengthModule::apply(IData& data) {
 
     return res;
 }
+
+
+std::vector<ModuleParameter> TextLengthModule::getParameterDescriptors() {
+    return {};
+}

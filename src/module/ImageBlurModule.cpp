@@ -52,3 +52,8 @@ ModuleResult ImageBlurModule::apply(IData& data) {
     result.message = "Image blurred.";
     return result;
 }
+
+
+std::vector<ModuleParameter>
+ImageBlurModule::getParameterDescriptors() {
+    return {}

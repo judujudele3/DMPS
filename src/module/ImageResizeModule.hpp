@@ -9,6 +9,8 @@ public:
     ImageResizeModule(int newW, int newH) : width(newW), height(newH) {}
     std::string getName() const override;
     ModuleResult apply(IData& data) override;
+    static std::vector<ModuleParameter> getParameterDescriptors();
+
 
 private:
     int width, height;

@@ -47,3 +47,9 @@ ModuleResult ImageGrayScaleModule::apply(IData& data) {
     result.message = "Image successfully converted to grayscale";
     return result;
 }
+
+
+std::vector<ModuleParameter>
+ImageGrayScaleModule::getParameterDescriptors() {
+    return {}; // Aucun paramètre
+}

@@ -31,3 +31,7 @@ ModuleResult ImageSizeModule::apply(IData& data) {
 
     return result;
 }
+
+std::vector<ModuleParameter> ImageSizeModule::getParameterDescriptors() {
+    return {};
+}

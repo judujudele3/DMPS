@@ -48,3 +48,9 @@ ModuleResult ImageColorHistogramModule::apply(IData& data) {
     result.message = "Color histogram successfully computed.";
     return result;
 }
+
+std::vector<ModuleParameter>
+ImageColorHistogramModule::getParameterDescriptors() {
+    return {};
+}
+

@@ -9,7 +9,7 @@ class ImageBrightnessModule : public IModule {
 public:
     std::string getName() const override;
     ModuleResult apply(IData& data) override;
-
+    static std::vector<ModuleParameter> getParameterDescriptors();
 private:
     // Calcul de la luminosité perceptuelle d’un pixel
     uint8_t intensity(const Pixel& p) const {

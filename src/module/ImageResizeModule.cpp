@@ -36,3 +36,12 @@ ModuleResult ImageResizeModule::apply(IData& data) {
     result.message = "Image resized.";
     return result;
 }
+
+
+std::vector<ModuleParameter>
+ImageResizeModule::getParameterDescriptors() {
+    return {
+        {"width", "int", 256, "Nouvelle largeur de l'image", 1, 10000},
+        {"height", "int", 256, "Nouvelle hauteur de l'image", 1, 10000}
+    };
+}

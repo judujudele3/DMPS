@@ -3,18 +3,55 @@
 #include "../dataLoader/TextDataLoader.hpp"
 
 Engine::Engine()
+    : m_loaderManager(std::make_unique<DataLoaderManager>())
+    , m_moduleManager(std::make_unique<ModuleManager>())
 {
-    // Ajouter les loaders disponibles
-    m_loaderManager.addLoader(std::make_shared<TextDataLoader>());
+    // Enregistrer les loaders disponibles
+    m_loaderManager->addLoader(std::make_shared<TextDataLoader>());
+    // ... autres loaders
 }
 
 void Engine::setData(std::shared_ptr<IData> data) {
     m_data = data;
 }
 
-void Engine::addModule(std::shared_ptr<IModule> module) {
-    m_modules.push_back(module);
+bool Engine::setActiveModules(const std::vector<SelectedModule>& selectedModules)
+{
+    // Delegate to ModuleManager to create instances
+    bool success = m_moduleManager->updateActiveModules(selectedModules);
+
+    if (!success) {
+        return false;
+    }
+
+    // Update our module list with the newly created instances
+    m_modules = m_moduleManager->getActiveModuleInstances();
+
+    return true;
 }
+
+std::vector<SelectedModule> Engine::getActiveModulesInfo() const
+{
+    return m_moduleManager->getActiveModulesInfo();
+}
+
+void Engine::clearModules()
+{
+    m_modules.clear();
+    m_moduleManager->clearActiveModules();
+}
+
+size_t Engine::getModuleCount() const
+{
+    return m_modules.size();
+}
+
+std::string Engine::getLastModuleError() const
+{
+    return m_moduleManager->getLastError();
+}
+
+
 
 ModuleResult Engine::applyModules() {
     ModuleResult finalResult;
@@ -48,7 +85,7 @@ std::shared_ptr<IData> Engine::getData() const {
 
 std::shared_ptr<IData> Engine::loadData(const std::string& path)
 {
-    auto data = m_loaderManager.loadData(path);
+    auto data = m_loaderManager->loadData(path);
     if (data)
     {
         m_data = data;

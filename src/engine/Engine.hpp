@@ -4,6 +4,7 @@
 #include "IEngine.hpp"
 #include "../core/ModuleResult.hpp"
 #include "../dataLoaderManager/DataLoaderManager.hpp"
+#include "../moduleManager/ModuleManager.hpp"
 #include <vector>
 #include <memory>
 
@@ -13,15 +14,20 @@ public:
     ~Engine() override = default;
 
     void setData(std::shared_ptr<IData> data) override;
-    void addModule(std::shared_ptr<IModule> module) override;
     ModuleResult applyModules() override;
     std::shared_ptr<IData> getData() const override;
     std::shared_ptr<IData> loadData(const std::string& path);
+    bool setActiveModules(const std::vector<SelectedModule>& selectedModules);
+    std::vector<SelectedModule> getActiveModulesInfo() const;
+    void clearModules();
+    size_t getModuleCount() const;
+    std::string getLastModuleError() const;
 
 private:
-    DataLoaderManager m_loaderManager;
+    std::unique_ptr<DataLoaderManager> m_loaderManager;
     std::shared_ptr<IData> m_data;
     std::vector<std::shared_ptr<IModule>> m_modules;
+    std::unique_ptr<ModuleManager> m_moduleManager;
 };
 
 #endif // ENGINE_HPP

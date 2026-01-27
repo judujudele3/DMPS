@@ -18,6 +18,8 @@ else()
     set(QT_VERSION_MAJOR 6)
 endif()
 
+find_package(OpenCV REQUIRED)
+
 file(GLOB_RECURSE SOURCES
     "src/*.cpp"
     "src/*.hpp"
@@ -30,6 +32,7 @@ target_link_libraries(DMPS PRIVATE
     Qt${QT_VERSION_MAJOR}::Core
     Qt${QT_VERSION_MAJOR}::Gui
     Qt${QT_VERSION_MAJOR}::Widgets
+    ${OpenCV_LIBS}
 )
 
 include(GNUInstallDirs)
@@ -37,5 +40,3 @@ install(TARGETS DMPS
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
-
-

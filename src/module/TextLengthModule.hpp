@@ -6,6 +6,7 @@
 #include "../data/TextData.hpp"
 #include <string>
 #include <memory>
+#include "../core/ModuleParameter.hpp"
 
 class TextLengthModule : public IModule {
 public:
@@ -14,6 +15,12 @@ public:
     std::string getName() const override;
 
     ModuleResult apply(IData& data) override;
+
+    static std::vector<ModuleParameter> getParameterDescriptors() {
+        return {};  // Pas de paramètres pour ce module simple
+    }
+
+
 };
 
 #endif

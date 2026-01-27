@@ -2,6 +2,8 @@
 #include "src/controller/Controller.hpp"
 #include "src/engine/Engine.hpp"
 #include "src/ui/display/TextDisplayAdapter.hpp"
+#include "src/ui/display/ImageDisplayAdapter.hpp"     // ← NOUVEAU
+#include "src/ui/display/TabularDisplayAdapter.hpp"
 #include <memory>
 #include <QApplication>
 
@@ -20,6 +22,8 @@ int main(int argc, char *argv[])
 
     // Ajouter les display adapters
     controller->addDisplayAdapter(std::make_shared<TextDisplayAdapter>());
+    controller->addDisplayAdapter(std::make_shared<ImageDisplayAdapter>());
+    controller->addDisplayAdapter(std::make_shared<TabularDisplayAdapter>());
 
     // Créer la fenêtre principale
     MainWindow w;

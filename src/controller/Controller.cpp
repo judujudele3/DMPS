@@ -40,17 +40,28 @@ void Controller::addDisplayAdapter(std::shared_ptr<IDisplayAdapter> adapter)
 void Controller::displayCurrentData(QWidget* container)
 {
     auto data = m_engine->getData();
-    if (!data)
-        return;
 
-    for (auto& adapter : m_displayAdapters)
-    {
-        if (adapter->canDisplay(*data))
-        {
+    std::cout << "[Controller] displayCurrentData() - Type: "
+              << static_cast<int>(data->type()) << std::endl;
+
+    std::cout << "[Controller] Nombre d'adapters: "
+              << m_displayAdapters.size() << std::endl;
+
+    int i = 0;
+    for (auto& adapter : m_displayAdapters) {
+        std::cout << "[Controller] Test adapter #" << i++ << std::endl;
+
+        bool canDisplay = adapter->canDisplay(*data);
+        std::cout << "[Controller]   -> canDisplay: " << canDisplay << std::endl;
+
+        if (canDisplay) {
+            std::cout << "[Controller] AFFICHAGE avec adapter #" << (i-1) << std::endl;
             adapter->display(*data, container);
             return;
         }
     }
+
+    std::cout << "[Controller] AUCUN ADAPTATEUR COMPATIBLE!" << std::endl;
 }
 
 

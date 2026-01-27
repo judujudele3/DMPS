@@ -1,6 +1,8 @@
 #include "Engine.hpp"
 #include "../module/IModule.hpp"
 #include "../dataLoader/TextDataLoader.hpp"
+#include "../dataLoader/ImageDataLoader.hpp"
+#include "../dataLoader/TabularDataLoader.hpp"
 
 Engine::Engine()
     : m_loaderManager(std::make_unique<DataLoaderManager>())
@@ -8,6 +10,8 @@ Engine::Engine()
 {
     // Enregistrer les loaders disponibles
     m_loaderManager->addLoader(std::make_shared<TextDataLoader>());
+    m_loaderManager->addLoader(std::make_shared<TabularDataLoader>());
+    m_loaderManager->addLoader(std::make_shared<ImageDataLoader>());
     // ... autres loaders
 }
 

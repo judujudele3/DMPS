@@ -29,9 +29,13 @@ void TabularData::addRow(const std::vector<std::string>& row) {
   //  return m_rows;
 //}
 
- std::vector<std::vector<std::string>>& TabularData::rows()  {
+ const std::vector<std::vector<std::string>>& TabularData::rows() const {
     return m_rows;
 }
+
+ std::vector<std::vector<std::string>>& TabularData::rows() {
+     return m_rows;
+ }
 
 size_t TabularData::rowCount() const {
     return m_rows.size();

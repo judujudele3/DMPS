@@ -7,7 +7,7 @@
 bool TabularDataLoader::supports(const std::string& extension) const {
     std::string ext = extension;
     std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
-    return ext == "csv"; // pour l'instant, on supporte que CSV
+    return ext == ".csv" || "csv"; // pour l'instant, on supporte que CSV
 }
 
 std::string TabularDataLoader::getExtension(const std::string& path) const {

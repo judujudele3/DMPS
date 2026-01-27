@@ -6,7 +6,7 @@
 #include "src/ui/display/TabularDisplayAdapter.hpp"
 #include <memory>
 #include <QApplication>
-/*
+
 #include"src/data/ImageData.hpp"
 #include <cstdint>
 
@@ -33,8 +33,9 @@ int main(int argc, char *argv[])
     return a.exec();
 
 }
-*/
 
+
+/*
 #include "src/DataSaveManager/DataSaveManager.hpp"
 #include "src/DataSaver/TextDataSaver.hpp"
 #include "src/DataSaver/TabularDataSaver.hpp"
@@ -103,4 +104,4 @@ int main() {
 
     return 0;
 }
-
+*/

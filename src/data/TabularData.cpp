@@ -27,11 +27,6 @@ void TabularData::addRow(const std::vector<std::string>& row) {
 }
 
 
-//constant version
-const std::vector<std::vector<std::string>>& TabularData::rows() const {
-  return m_rows;
-}
-
  const std::vector<std::vector<std::string>>& TabularData::rows() const {
     return m_rows;
 }

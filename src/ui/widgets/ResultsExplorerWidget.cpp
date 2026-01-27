@@ -2,7 +2,7 @@
 #include <QHeaderView>
 #include <QStyle>
 
-ResultsExplorerWidget::ResultsExplorerWidget(QWidget *parent)
+ResultsExplorerWidget::ResultsExplorerWidget(QWidget* parent)
     : QDockWidget("Results Explorer", parent)
     , displayManager_(std::make_unique<ResultDisplayManager>())
 {

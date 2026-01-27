@@ -1,13 +1,13 @@
 #include "TabularFillMissingValuesModule.hpp"
 
-TabularFillMissingModule::TabularFillMissingModule(const std::string& column, const std::string& fillValue)
+TabularFillMissingValuesModule::TabularFillMissingValuesModule(const std::string& column, const std::string& fillValue)
     : m_column(column), m_fillValue(fillValue) {}
 
-std::string TabularFillMissingModule::getName() const {
+std::string TabularFillMissingValuesModule::getName() const {
     return "Fill Missing Values Module";
 }
 
-ModuleResult TabularFillMissingModule::apply(IData& data) {
+ModuleResult TabularFillMissingValuesModule::apply(IData& data) {
     ModuleResult res;
     if (data.type() != DataType::Tabular) {
         res.addError(ErrorType::Error, "INVALID_DATA_TYPE", "TabularFillMissingModule expects TabularData.");
@@ -32,7 +32,7 @@ ModuleResult TabularFillMissingModule::apply(IData& data) {
     return res;
 }
 
-std::vector<ModuleParameter> TabularFillMissingModule::getParameterDescriptors() {
+std::vector<ModuleParameter> TabularFillMissingValuesModule::getParameterDescriptors() {
     return {
         {"column", "string", std::string(""), "Nom de la colonne à remplir"},
         {"fillValue", "string", std::string("0"), "Valeur de remplissage pour les cases vides"}

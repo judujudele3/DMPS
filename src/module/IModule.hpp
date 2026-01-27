@@ -3,7 +3,7 @@
 #pragma once
 #include <string>
 #include "../core/ModuleResult.hpp"
-
+#include "../core/ModuleParameter.hpp"
 
 class IData; // forward declaration
 

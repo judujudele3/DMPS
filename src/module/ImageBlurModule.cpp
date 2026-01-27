@@ -54,6 +54,5 @@ ModuleResult ImageBlurModule::apply(IData& data) {
 }
 
 
-std::vector<ModuleParameter>
-ImageBlurModule::getParameterDescriptors() {
-    return {}
+std::vector<ModuleParameter> ImageBlurModule::getParameterDescriptors() {
+    return {};}

@@ -51,6 +51,5 @@ ModuleResult ImageAverageColorModule::apply(IData& data) {
 }
 
 
-std::vector<ModuleParameter>
-ImageAverageColorModule::getParameterDescriptors() {
-    return {}
+std::vector<ModuleParameter> ImageAverageColorModule::getParameterDescriptors() {
+    return {};}

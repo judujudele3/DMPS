@@ -25,9 +25,10 @@ void TabularData::addRow(const std::vector<std::string>& row) {
     m_rows.push_back(row);
 }
 
-//const std::vector<std::vector<std::string>>& TabularData::rows() const {
-  //  return m_rows;
-//}
+//constant version
+const std::vector<std::vector<std::string>>& TabularData::rows() const {
+  return m_rows;
+}
 
  std::vector<std::vector<std::string>>& TabularData::rows()  {
     return m_rows;

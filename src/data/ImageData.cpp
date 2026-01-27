@@ -14,13 +14,13 @@ DataType ImageData::type() const {
     return DataType::Image;
 }
 
-//int ImageData::getWidth() const{
-  //  return m_width;
-//}
+int ImageData::getWidth() const{
+    return m_width;
+}
 
-//int ImageData::getHeight() const {
-  //  return m_height;
-//}
+int ImageData::getHeight() const {
+    return m_height;
+}
 
 
 int& ImageData::getWidth() {

@@ -21,6 +21,9 @@ MainWindow::~MainWindow() {
 void MainWindow::setController(Controller* controller)
 {
     m_controller = controller;
+
+    connect(this, &MainWindow::enableDisableModulesRequested,
+            m_controller, &Controller::onEnableDisableModules);
 }
 
 void MainWindow::on_actionOpen_triggered()
@@ -54,4 +57,9 @@ void MainWindow::onApplyModule() {
 void MainWindow::onAbout() {
     QMessageBox::about(this, "À propos",
                        "DMPS — Data & Media Processing Studio\nVersion prototype");
+}
+
+void MainWindow::on_actionEnable_Disable_triggered()
+{
+    emit enableDisableModulesRequested();
 }

@@ -6,6 +6,7 @@
 #include "../data/TextData.hpp"
 #include <string>
 #include <memory>
+#include "../core/ModuleParameter.hpp"
 
 class TextLengthModule : public IModule {
 public:

@@ -12,7 +12,6 @@ public:
     virtual ~IEngine() = default;
 
     virtual void setData(std::shared_ptr<IData> data) = 0;
-    virtual void addModule(std::shared_ptr<IModule> module) = 0;
     virtual ModuleResult applyModules() = 0;
 
 

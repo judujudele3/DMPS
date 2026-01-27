@@ -43,7 +43,13 @@ void MainWindow::on_actionOpen_triggered()
     if (m_controller)
         m_controller->openFile(filePath.toStdString());
 
+    if (!m_controller) {
+        std::cout << "[MainWindow] ERROR: m_controller is null !" << std::endl;
+        return;
+    }
+
     m_controller->displayCurrentData(ui->stackedWidget);
+
 
 }
 

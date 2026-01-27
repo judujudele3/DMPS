@@ -24,8 +24,6 @@ public:
     void addRow(const std::vector<std::string>& row);
 
     const std::vector<std::vector<std::string>>& rows() const;
-    // on a supprimé const pour que on peut travailler sur le tabulardata
-    const std::vector<std::vector<std::string>>& rows() const ;
     std::vector<std::vector<std::string>>& rows();
     size_t rowCount() const;
     size_t columnCount() const;

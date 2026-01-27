@@ -32,9 +32,6 @@ const std::vector<std::vector<std::string>>& TabularData::rows() const {
   return m_rows;
 }
 
- const std::vector<std::vector<std::string>>& TabularData::rows() const {
-    return m_rows;
-}
 
  std::vector<std::vector<std::string>>& TabularData::rows() {
      return m_rows;

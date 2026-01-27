@@ -6,6 +6,7 @@
 #include "../ui/MainWindow.hpp"
 #include <iostream>
 #include <QMessageBox>
+#include <QStackedWidget>
 
 
 Controller::Controller(std::shared_ptr<Engine> engine, QObject* parent)
@@ -108,33 +109,42 @@ void Controller::applyModuleConfiguration(const std::vector<SelectedModule>& sel
 }
 
 
-void Controller::onApplyModules(QWidget* parentWidget)
+void Controller::onApplyModules(MainWindow* mainWindow)
 {
     if (!m_engine) {
-        QMessageBox::warning(parentWidget, "Engine Error", "Engine is not initialized.");
+        QMessageBox::warning(mainWindow, "Engine Error", "Engine is not initialized.");
         return;
     }
 
     // Check if data is loaded
     if (!m_engine->getData()) {
-        QMessageBox::warning(parentWidget, "No Data",
+        QMessageBox::warning(mainWindow, "No Data",
                              "Please load a file before applying modules.");
         return;
     }
 
     // Check if modules are active
     if (m_engine->getModuleCount() == 0) {
-        QMessageBox::information(parentWidget, "No Modules",
+        QMessageBox::information(mainWindow, "No Modules",
                                  "No modules are currently active.\n\n"
                                  "Please enable modules via Modules → Enable/Disable first.");
         return;
     }
 
     // Execute modules
+    std::cout << "[Controller] Applying modules..." << std::endl;
     auto results = m_engine->applyModules();
 
-    // Cast parentWidget to MainWindow to call displayModuleResults
-    MainWindow* mainWindow = qobject_cast<MainWindow*>(parentWidget);
+    // ✨ RAFRAÎCHIR L'AFFICHAGE DE LA DONNÉE
+    if (mainWindow) {
+        // Récupérer le container widget (stackedWidget dans ton cas)
+        QStackedWidget* container = mainWindow->findChild<QStackedWidget*>("stackedWidget");
+        if (container) {
+            displayCurrentData(container);
+        }
+    }
+
+    // Display results
     if (mainWindow) {
         mainWindow->displayModuleResults(results);
     }
@@ -165,6 +175,6 @@ void Controller::onApplyModules(QWidget* parentWidget)
 
         errorSummary += "\nCheck the Messages panel for details.";
 
-        QMessageBox::warning(parentWidget, "Execution Errors", errorSummary);
+        QMessageBox::warning(mainWindow, "Execution Errors", errorSummary);
     }
 }

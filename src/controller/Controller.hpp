@@ -21,7 +21,7 @@ public:
     explicit Controller(std::shared_ptr<Engine> engine, QObject* parent = nullptr);
     // ouverture de fichier : le controller reçoit le path et demande à l'engine de charger
     void openFile(const std::string &path);
-    void onApplyModules(QWidget* parentWidget);
+    void onApplyModules(MainWindow* mainWindow);
     void addDisplayAdapter(std::shared_ptr<IDisplayAdapter> adapter);
     void displayCurrentData(QWidget* container);
 

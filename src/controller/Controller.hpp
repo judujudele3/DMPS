@@ -12,6 +12,7 @@ class IData; // forward declaration
 class Engine;
 class IDisplayAdapter;
 class QWidget;
+class MainWindow;
 
 class Controller : public QObject
 {
@@ -20,7 +21,7 @@ public:
     explicit Controller(std::shared_ptr<Engine> engine, QObject* parent = nullptr);
     // ouverture de fichier : le controller reçoit le path et demande à l'engine de charger
     void openFile(const std::string &path);
-
+    void onApplyModules(QWidget* parentWidget);
     void addDisplayAdapter(std::shared_ptr<IDisplayAdapter> adapter);
     void displayCurrentData(QWidget* container);
 

@@ -2,9 +2,9 @@
 #define ENGINE_HPP
 
 #include "IEngine.hpp"
-#include "../core/ModuleResult.hpp"
 #include "../dataLoaderManager/DataLoaderManager.hpp"
 #include "../moduleManager/ModuleManager.hpp"
+#include <chrono>
 #include <vector>
 #include <memory>
 
@@ -14,7 +14,7 @@ public:
     ~Engine() override = default;
 
     void setData(std::shared_ptr<IData> data) override;
-    ModuleResult applyModules() override;
+    std::vector<ModuleExecutionResult> applyModules() override;
     std::shared_ptr<IData> getData() const override;
     std::shared_ptr<IData> loadData(const std::string& path);
     bool setActiveModules(const std::vector<SelectedModule>& selectedModules);

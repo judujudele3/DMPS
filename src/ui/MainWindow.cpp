@@ -11,6 +11,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->actionExit, &QAction::triggered, this, &MainWindow::onQuit);
     connect(ui->actionApply_Modules, &QAction::triggered, this, &MainWindow::onApplyModule);
     connect(ui->actionAbout, &QAction::triggered, this, &MainWindow::onAbout);
+    setupDockWidgets();
 
 }
 
@@ -51,7 +52,11 @@ void MainWindow::onQuit() {
 }
 
 void MainWindow::onApplyModule() {
-    QMessageBox::information(this, "Appliquer", "Appliquer module (à implémenter)");
+    if (m_controller) {
+        m_controller->onApplyModules(this); // Passer 'this' comme parent
+    } else {
+        QMessageBox::warning(this, "Error", "Controller not initialized");
+    }
 }
 
 void MainWindow::onAbout() {
@@ -62,4 +67,38 @@ void MainWindow::onAbout() {
 void MainWindow::on_actionEnable_Disable_triggered()
 {
     emit enableDisableModulesRequested();
+}
+
+
+void MainWindow::setupDockWidgets()
+{
+    // Create Results Explorer (left side)
+    resultsExplorer_ = new ResultsExplorerWidget(this);
+    addDockWidget(Qt::LeftDockWidgetArea, resultsExplorer_);
+    resultsExplorer_->hide(); // Hidden initially
+
+    // Create Messages Log (bottom)
+    messagesLog_ = new MessagesLogWidget(this);
+    addDockWidget(Qt::BottomDockWidgetArea, messagesLog_);
+    messagesLog_->hide(); // Hidden initially
+
+    // Add to View menu (optional)
+    QMenu* viewMenu = menuBar()->addMenu("View");
+    viewMenu->addAction(resultsExplorer_->toggleViewAction());
+    viewMenu->addAction(messagesLog_->toggleViewAction());
+}
+
+void MainWindow::displayModuleResults(const std::vector<ModuleExecutionResult>& results)
+{
+    // Show panels if hidden
+    if (resultsExplorer_->isHidden()) {
+        resultsExplorer_->show();
+    }
+    if (messagesLog_->isHidden()) {
+        messagesLog_->show();
+    }
+
+    // Display results
+    resultsExplorer_->displayResults(results);
+    messagesLog_->logResults(results);
 }

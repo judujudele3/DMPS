@@ -4,6 +4,10 @@
 #include <QMainWindow>
 #include <QMessageBox>
 #include "../controller/Controller.hpp"
+#include "../core/ModuleExecutionResult.hpp"
+#include "widgets/ResultsExplorerWidget.hpp"
+#include "widgets/MessagesLogWidget.hpp"
+#include <vector>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -18,10 +22,16 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     void setController(Controller* controller);
+    void displayModuleResults(const std::vector<ModuleExecutionResult>& results);
 
 private:
     Ui::MainWindow *ui;
     Controller* m_controller = nullptr;
+    ResultsExplorerWidget* resultsExplorer_;
+    MessagesLogWidget* messagesLog_;
+
+    void setupDockWidgets();
+
 
 signals:
     void enableDisableModulesRequested();

@@ -22,8 +22,9 @@ public:
 
     DataType type() const override;
 
-    //int getWidth() const;
-    //int getHeight() const;
+    int getWidth() const;
+    int getHeight() const;
+
     int& getWidth() ;
     int& getHeight() ;
 

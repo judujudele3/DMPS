@@ -8,6 +8,7 @@
 #include "../core/ModuleExecutionResult.hpp"
 #include "widgets/ResultsExplorerWidget.hpp"
 #include "widgets/MessagesLogWidget.hpp"
+#include "helpers/SaveFileDialogHelper.hpp"
 #include <vector>
 
 QT_BEGIN_NAMESPACE
@@ -43,6 +44,7 @@ private slots:
     void onApplyModule();    // appelé quand on clique sur "Appliquer"
     void onAbout();          // appelé quand on clique sur "À propos"
     void on_actionEnable_Disable_triggered(); // appelé quand on clique sur "Enable/Disable"
+    void on_actionSave_Save_As_triggered();
 
 };
 

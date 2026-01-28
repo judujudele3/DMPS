@@ -1,5 +1,6 @@
 #include "MainWindow.hpp"
 #include "ui_MainWindow.h"
+#include "helpers/SaveFileDialogHelper.hpp"
 #include <QFileDialog>
 #include <QDebug>
 
@@ -79,6 +80,15 @@ void MainWindow::on_actionEnable_Disable_triggered()
     emit enableDisableModulesRequested();
 }
 
+void MainWindow::on_actionSave_Save_As_triggered()
+{
+    if (!m_controller) {
+        QMessageBox::warning(this, "Error", "Controller not initialized");
+        return;
+    }
+
+    m_controller->saveDataAs(this);
+}
 
 void MainWindow::setupDockWidgets()
 {

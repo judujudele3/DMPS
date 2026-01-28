@@ -8,9 +8,12 @@
 #include "../ui/display/TabularDisplayAdapter.hpp"
 #include "../ui/display/TextDisplayAdapter.hpp"
 #include "../ui/MainWindow.hpp"
+#include "../ui/helpers/SaveFileDialogHelper.hpp"
 #include <iostream>
 #include <QMessageBox>
 #include <QStackedWidget>
+#include <QFileDialog>
+
 
 
 
@@ -158,7 +161,7 @@ void Controller::onApplyModules(MainWindow* mainWindow)
     std::cout << "[Controller] Applying modules..." << std::endl;
     auto results = m_engine->applyModules();
 
-    // ✨ RAFRAÎCHIR L'AFFICHAGE DE LA DONNÉE
+    //  RAFRAÎCHIR L'AFFICHAGE DE LA DONNÉE
     if (mainWindow) {
         // Récupérer le container widget (stackedWidget dans ton cas)
         QStackedWidget* container = mainWindow->findChild<QStackedWidget*>("stackedWidget");
@@ -199,6 +202,51 @@ void Controller::onApplyModules(MainWindow* mainWindow)
         errorSummary += "\nCheck the Messages panel for details.";
 
         QMessageBox::warning(mainWindow, "Execution Errors", errorSummary);
+    }
+}
+
+void Controller::saveDataAs(QWidget* parentWidget)
+{
+    if (!m_engine) {
+        QMessageBox::warning(parentWidget, "Engine Error", "Engine is not initialized.");
+        return;
+    }
+
+    // Check if data is loaded
+    auto data = m_engine->getData();
+    if (!data) {
+        QMessageBox::warning(parentWidget, "No Data",
+                             "No data to save. Please load a file first.");
+        return;
+    }
+
+    // Generate file filter based on data type
+    QString filter = SaveFileDialogHelper::generateFilter(*data, m_engine->getSaveManager());
+    QString defaultExt = SaveFileDialogHelper::getDefaultExtension(*data);
+
+    // Show Save File Dialog
+    QString filePath = QFileDialog::getSaveFileName(
+        parentWidget,
+        tr("Save File As"),
+        "",  // Default directory (empty = current)
+        filter
+        );
+
+    if (filePath.isEmpty()) {
+        // User cancelled
+        return;
+    }
+
+    // Save the data
+    bool success = m_engine->saveData(filePath.toStdString());
+
+    if (success) {
+        QMessageBox::information(parentWidget, "Success",
+                                 "File saved successfully to:\n" + filePath);
+    } else {
+        QMessageBox::critical(parentWidget, "Save Error",
+                              "Failed to save file to:\n" + filePath +
+                                  "\n\nCheck console for details.");
     }
 }
 

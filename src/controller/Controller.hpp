@@ -3,6 +3,8 @@
 
 #pragma once
 #include "../moduleManager/ModuleManager.hpp"
+#include "../ui/helpers/SaveFileDialogHelper.hpp"
+#include <QFileDialog>
 #include <string>
 #include <memory>
 #include <vector>
@@ -24,6 +26,7 @@ public:
     void onApplyModules(MainWindow* mainWindow);
     void addDisplayAdapter(std::shared_ptr<IDisplayAdapter> adapter);
     void displayCurrentData(QWidget* container);
+    void saveDataAs(QWidget* parentWidget);
 
 public slots:
     void onEnableDisableModules();

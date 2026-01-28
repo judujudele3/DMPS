@@ -1,29 +1,58 @@
-
 #include "ImageDisplayAdapter.hpp"
 #include "../../data/ImageData.hpp"
 #include "../../data/IData.hpp"
 #include "../../core/DataType.hpp"
-#include <QLabel>
-#include <QPixmap>
-#include <QImage>
+#include <QGraphicsView>
+#include <QGraphicsScene>
+#include <QGraphicsPixmapItem>
 #include <QVBoxLayout>
-#include <QScrollArea>
+#include <QWheelEvent>
 #include <QStackedWidget>
 #include <QDebug>
 #include <iostream>
 
+// Classe custom pour gérer le zoom à la molette
+class ZoomableGraphicsView : public QGraphicsView
+{
+public:
+    ZoomableGraphicsView(QWidget* parent = nullptr) : QGraphicsView(parent)
+    {
+        setDragMode(QGraphicsView::ScrollHandDrag);
+        setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
+    }
+
+protected:
+    void wheelEvent(QWheelEvent* event) override
+    {
+        // Zoom avec la molette
+        double scaleFactor = 1.15;
+
+        if (event->angleDelta().y() > 0) {
+            // Zoom in
+            scale(scaleFactor, scaleFactor);
+        } else {
+            // Zoom out
+            scale(1.0 / scaleFactor, 1.0 / scaleFactor);
+        }
+    }
+};
 
 bool ImageDisplayAdapter::canDisplay(const IData& data) const
 {
     if (data.type() != DataType::Image)
         return false;
-
     return dynamic_cast<const ImageData*>(&data) != nullptr;
 }
 
-
 void ImageDisplayAdapter::display(const IData& data, QWidget* container)
 {
+    std::cout << "[ImageDisplayAdapter] display() appelé" << std::endl;
+
+    if (!canDisplay(data)) {
+        std::cout << "[ImageDisplayAdapter] Type incompatible" << std::endl;
+        return;
+    }
+
     // Cast sécurisé
     const ImageData& imageData = dynamic_cast<const ImageData&>(data);
 
@@ -49,28 +78,49 @@ void ImageDisplayAdapter::display(const IData& data, QWidget* container)
     QVBoxLayout* layout = new QVBoxLayout(page);
     layout->setContentsMargins(0, 0, 0, 0);
 
-    // Créer QScrollArea pour gérer les grandes images
-    QScrollArea* scrollArea = new QScrollArea(page);
-    scrollArea->setAlignment(Qt::AlignCenter);
-    scrollArea->setWidgetResizable(false); // Important: ne pas auto-redimensionner
-
-    // Créer QLabel et l'ajouter au scrollArea
-    QLabel* imageLabel = createImageLabel(imageData, scrollArea);
-    scrollArea->setWidget(imageLabel);
-
-    // Ajouter le scrollArea au layout (pas directement le label)
-    layout->addWidget(scrollArea);
+    // Créer la vue zoomable (au lieu de QScrollArea + QLabel)
+    QGraphicsView* view = createImageView(imageData, page);
+    layout->addWidget(view);
 
     // Ajouter la page au stackedWidget
     stacked->addWidget(page);
     stacked->setCurrentWidget(page);
 
     std::cout << "[DEBUG] StackedWidget pages after: " << stacked->count() << std::endl;
+    std::cout << "[ImageDisplayAdapter] Affichage terminé (zoomable)" << std::endl;
 }
 
+QGraphicsView* ImageDisplayAdapter::createImageView(const ImageData& imageData, QWidget* parent)
+{
+    // Créer la scène
+    QGraphicsScene* scene = new QGraphicsScene(parent);
+
+    // Convertir ImageData en QPixmap
+    QPixmap pixmap = convertToPixmap(imageData);
+
+    if (pixmap.isNull()) {
+        std::cout << "[ImageDisplayAdapter] ERROR: QPixmap null" << std::endl;
+        return new ZoomableGraphicsView(parent);
+    }
+
+    // Ajouter l'image à la scène
+    scene->addPixmap(pixmap);
+
+    // Créer la vue zoomable
+    ZoomableGraphicsView* view = new ZoomableGraphicsView(parent);
+    view->setScene(scene);
+
+    // Ajuster la vue pour que l'image soit visible entièrement au départ
+    view->fitInView(scene->sceneRect(), Qt::KeepAspectRatio);
+
+    std::cout << "[ImageDisplayAdapter] GraphicsView créée avec zoom" << std::endl;
+
+    return view;
+}
 
 QPixmap ImageDisplayAdapter::convertToPixmap(const ImageData& imageData)
 {
+    // Utiliser la méthode améliorée du V2 avec setPixelColor
     QImage img(
         imageData.getWidth(),
         imageData.getHeight(),
@@ -85,29 +135,10 @@ QPixmap ImageDisplayAdapter::convertToPixmap(const ImageData& imageData)
     }
 
     QPixmap pixmap = QPixmap::fromImage(img);
+
     std::cout << "[DEBUG] Pixmap size: "
               << pixmap.width() << "x" << pixmap.height()
               << " | isNull: " << pixmap.isNull() << std::endl;
+
     return pixmap;
-}
-
-
-QLabel* ImageDisplayAdapter::createImageLabel(
-    const ImageData& imageData,
-    QWidget* parent
-    ) {
-    QLabel* label = new QLabel(parent);
-    QPixmap pix = convertToPixmap(imageData);
-
-    if (pix.isNull()) {
-        label->setText("Erreur: impossible d'afficher l'image");
-        qDebug() << "Pixmap NULL!";
-    } else {
-        label->setPixmap(pix);
-    }
-
-    label->setScaledContents(true); // Pour s'adapter à la taille du container
-    label->setAlignment(Qt::AlignCenter);
-
-    return label;
 }

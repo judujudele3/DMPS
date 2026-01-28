@@ -18,6 +18,10 @@ else()
     set(QT_VERSION_MAJOR 6)
 endif()
 
+if(WIN32)
+    set(APP_ICON_RESOURCE_WINDOWS "${CMAKE_CURRENT_SOURCE_DIR}/resources/app.rc")
+endif()
+
 include_directories(include)
 
 file(GLOB_RECURSE SOURCES
@@ -31,7 +35,8 @@ file(GLOB_RECURSE SOURCES
 
 
 
-add_executable(DMPS main.cpp ${SOURCES})
+add_executable(DMPS main.cpp ${SOURCES}
+${APP_ICON_RESOURCE_WINDOWS})
 
 # AJOUT : Lier les bibliothèques Qt
 target_link_libraries(DMPS PRIVATE

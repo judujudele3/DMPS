@@ -2,7 +2,6 @@
 #define TEXTDISPLAYADAPTER_HPP
 
 #pragma once
-
 #include "IDisplayAdapter.hpp"
 
 class TextDisplayAdapter : public IDisplayAdapter

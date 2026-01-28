@@ -503,7 +503,8 @@ void MainWindow::onDocumentation()
 
 void MainWindow::onClose()
 {
-    // Demander confirmation
+    qDebug() << "[onClose] called";
+
     if (m_controller && m_controller->hasData()) {
         QMessageBox::StandardButton reply = QMessageBox::question(
             this,
@@ -512,24 +513,33 @@ void MainWindow::onClose()
             QMessageBox::Cancel | QMessageBox::Yes,
             QMessageBox::Cancel
             );
-
-        if (reply == QMessageBox::Cancel) {
+        if (reply == QMessageBox::Cancel)
             return;
-        }
     }
 
     // Fermer le fichier
     if (m_controller) {
         m_controller->closeFile();
-
-        // Vider l'affichage
-        if (ui->stackedWidget->layout()) {
-            QWidget().setLayout(ui->stackedWidget->layout());
-        }
-
-        // Ou créer un widget vide
-        QWidget* emptyWidget = new QWidget(ui->stackedWidget);
-        ui->stackedWidget->addWidget(emptyWidget);
-        ui->stackedWidget->setCurrentWidget(emptyWidget);
+        qDebug() << "[onClose] File closed";
     }
+
+    if (!ui->stackedWidget) {
+        qDebug() << "[onClose] ERROR: stackedWidget is null!";
+        return;
+    }
+
+    // Supprimer tous les widgets existants
+    while (QWidget* w = ui->stackedWidget->currentWidget()) {
+        ui->stackedWidget->removeWidget(w);
+        w->deleteLater();
+    }
+
+    // Ajouter un widget vide
+    QWidget* emptyWidget = new QWidget();
+    ui->stackedWidget->addWidget(emptyWidget);
+    ui->stackedWidget->setCurrentWidget(emptyWidget);
+
+    qDebug() << "[onClose] stackedWidget reset with empty widget";
 }
+
+

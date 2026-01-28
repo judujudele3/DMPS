@@ -17,6 +17,11 @@ class MainWindow;
 }
 QT_END_NAMESPACE
 
+enum class Theme {
+    Light,
+    Dark
+};
+
 class MainWindow : public QMainWindow {
     Q_OBJECT
 
@@ -31,8 +36,16 @@ private:
     Controller* m_controller = nullptr;
     ResultsExplorerWidget* resultsExplorer_;
     MessagesLogWidget* messagesLog_;
-
+    void setupShortcuts();
     void setupDockWidgets();
+    /////Theme/////
+    Theme currentTheme_;
+    void setupThemeMenu();
+    void applyTheme(Theme theme);
+    void applyLightTheme();
+    void applyDarkTheme();
+    void saveThemePreference(Theme theme);
+    Theme loadThemePreference();
 
 
 signals:
@@ -45,6 +58,10 @@ private slots:
     void onAbout();          // appelé quand on clique sur "À propos"
     void on_actionEnable_Disable_triggered(); // appelé quand on clique sur "Enable/Disable"
     void on_actionSave_Save_As_triggered();
+    void resetDockLayout();
+    void onFeatureNotImplemented();
+    void onDocumentation();
+    void onClose();
 
 };
 

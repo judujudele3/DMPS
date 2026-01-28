@@ -195,3 +195,9 @@ std::vector<std::string> Engine::getAvailableSaveFormats() const
 DataSaveManager& Engine::getSaveManager() const {
     return *m_saveManager;
 }
+
+void Engine::clearData()
+{
+    m_data.reset();  // Libère le shared_ptr
+    std::cout << "[Engine] Données effacées." << std::endl;
+}

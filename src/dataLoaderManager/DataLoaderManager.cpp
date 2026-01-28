@@ -19,6 +19,6 @@ std::shared_ptr<IData> DataLoaderManager::loadData(const std::string& path)
             return loader->load(path);
     }
 
-    std::cerr << "[DataLoaderManager] Aucun loader pour : " << ext << std::endl;
+    std::cerr << "No loader for: " << ext << std::endl;
     return nullptr;
 }

@@ -1,3 +1,4 @@
+
 #ifndef MAINWINDOW_HPP
 #define MAINWINDOW_HPP
 
@@ -46,3 +47,4 @@ private slots:
 };
 
 #endif // MAINWINDOW_HPP
+

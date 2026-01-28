@@ -3,6 +3,8 @@
 #include <QFileDialog>
 #include <QDebug>
 
+
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
     ui(new Ui::MainWindow) {
@@ -27,25 +29,33 @@ void MainWindow::setController(Controller* controller)
             m_controller, &Controller::onEnableDisableModules);
 }
 
+// MainWindow.cpp
 void MainWindow::on_actionOpen_triggered()
 {
     QString filePath = QFileDialog::getOpenFileName(
         this,
         tr("Open file"),
         "",
-        tr("Text files (*.txt);;All files (*.*)")
+        tr("All files (*.*)")
         );
+
 
     if (filePath.isEmpty())
         return;
 
 
+    // appeler le controller
     if (m_controller)
         m_controller->openFile(filePath.toStdString());
 
-    m_controller->displayCurrentData(ui->stackedWidget);
+    if (m_controller)
+        qDebug() << "[DEBUG] stackedWidget pointer:" << ui->stackedWidget;
+        qDebug() << "[DEBUG] stackedWidget visible:" << ui->stackedWidget->isVisible();
 
+        m_controller->displayCurrentData(ui->stackedWidget);
 }
+
+
 
 void MainWindow::onQuit() {
     close();  // ferme la fenêtre principale
@@ -102,3 +112,4 @@ void MainWindow::displayModuleResults(const std::vector<ModuleExecutionResult>& 
     resultsExplorer_->displayResults(results);
     messagesLog_->logResults(results);
 }
+

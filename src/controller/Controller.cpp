@@ -1,36 +1,53 @@
+
 #include "Controller.hpp"
 #include "../engine/Engine.hpp"
 #include "../ui/display/IDisplayAdapter.hpp"
 #include "../ui/dialogs/ModuleConfigDialog.hpp"
 #include "../moduleManager/ModuleRegistry.hpp"
+#include "../ui/display/ImageDisplayAdapter.hpp"
+#include "../ui/display/TabularDisplayAdapter.hpp"
+#include "../ui/display/TextDisplayAdapter.hpp"
 #include "../ui/MainWindow.hpp"
 #include <iostream>
 #include <QMessageBox>
 #include <QStackedWidget>
 
 
+
 Controller::Controller(std::shared_ptr<Engine> engine, QObject* parent)
     : QObject(parent)
     , m_engine(engine)
 {
+    // Image
+    addDisplayAdapter(std::make_shared<ImageDisplayAdapter>());
+
+    // Tabular
+    addDisplayAdapter(std::make_shared<TabularDisplayAdapter>());
+
+    // Texte
+    addDisplayAdapter(std::make_shared<TextDisplayAdapter>());
 }
+
+
 
 void Controller::openFile(const std::string &path)
 {
     if (path.empty())
         return;
 
-    std::cout << "[Controller] Ouverture du fichier : " << path << std::endl;
+    std::cout << "[Controller] Data ready for processing : " << path << std::endl;
 
     auto data = m_engine->loadData(path);
     if (!data)
     {
-        std::cout << "[Controller] Échec du chargement." << std::endl;
+        std::cout << "[Controller] Loading failed" << std::endl;
         return;
     }
 
-    std::cout << "[Controller] Données prêtes pour traitement." << std::endl;
+    std::cout << "[Controller] Data ready for processing." << std::endl;
 }
+
+
 
 void Controller::addDisplayAdapter(std::shared_ptr<IDisplayAdapter> adapter)
 {
@@ -38,31 +55,37 @@ void Controller::addDisplayAdapter(std::shared_ptr<IDisplayAdapter> adapter)
 }
 
 
+
 void Controller::displayCurrentData(QWidget* container)
 {
+
     auto data = m_engine->getData();
 
-    std::cout << "[Controller] displayCurrentData() - Type: "
-              << static_cast<int>(data->type()) << std::endl;
+    std::cout << "[DEBUG] displayCurrentData called" << std::endl;
+    if (!data) {
+        std::cout << "[DEBUG] No data loaded!" << std::endl;
+        return;
+    }
+    std::cout << "[DEBUG] Data type: " << static_cast<int>(data->type()) << std::endl;
 
-    std::cout << "[Controller] Nombre d'adapters: "
-              << m_displayAdapters.size() << std::endl;
 
     int i = 0;
+
     for (auto& adapter : m_displayAdapters) {
-        std::cout << "[Controller] Test adapter #" << i++ << std::endl;
+        std::cout << "[Controller] Test adapter " << i++ << std::endl;
 
         bool canDisplay = adapter->canDisplay(*data);
         std::cout << "[Controller]   -> canDisplay: " << canDisplay << std::endl;
 
         if (canDisplay) {
-            std::cout << "[Controller] AFFICHAGE avec adapter #" << (i-1) << std::endl;
+            std::cout << "[Controller] Display using adapter " << (i-1) << std::endl;
             adapter->display(*data, container);
             return;
         }
     }
 
-    std::cout << "[Controller] AUCUN ADAPTATEUR COMPATIBLE!" << std::endl;
+
+    std::cout << "[Controller] NO COMPATIBLE ADAPTER FOUND!" << std::endl;
 }
 
 
@@ -73,22 +96,22 @@ void Controller::onEnableDisableModules()
         return;
     }
 
-    // Récupérer les modules disponibles
+    // Retrieve available modules
     auto availableModules = ModuleRegistry::getAvailableModules();
 
-    // Récupérer les modules actuellement actifs
+    // Retrieve currently active modules
     auto activeModules = m_engine->getActiveModulesInfo();
 
-    // Ouvrir le dialogue de configuration
+    // Opening configuration dialog
     ModuleConfigDialog dialog(nullptr);
     dialog.setAvailableModules(availableModules);
     dialog.setActiveModules(activeModules);
 
     if (dialog.exec() == QDialog::Accepted) {
-        // Récupérer la configuration choisie par l'utilisateur
+        // Retrieve user-selected configuration
         auto selectedModules = dialog.getSelectedModules();
 
-        // Appliquer la configuration
+        // Apply settings
         applyModuleConfiguration(selectedModules);
     }
 }
@@ -178,3 +201,4 @@ void Controller::onApplyModules(MainWindow* mainWindow)
         QMessageBox::warning(mainWindow, "Execution Errors", errorSummary);
     }
 }
+

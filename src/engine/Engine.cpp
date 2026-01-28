@@ -6,13 +6,14 @@
 
 Engine::Engine()
     : m_loaderManager(std::make_unique<DataLoaderManager>())
-    , m_moduleManager(std::make_unique<ModuleManager>())
+     ,m_moduleManager(std::make_unique<ModuleManager>())
 {
-    // Enregistrer les loaders disponibles
+    // Text
     m_loaderManager->addLoader(std::make_shared<TextDataLoader>());
-    m_loaderManager->addLoader(std::make_shared<TabularDataLoader>());
+    // Image
     m_loaderManager->addLoader(std::make_shared<ImageDataLoader>());
-    // ... autres loaders
+    // Tabular
+    m_loaderManager->addLoader(std::make_shared<TabularDataLoader>());
 }
 
 void Engine::setData(std::shared_ptr<IData> data) {

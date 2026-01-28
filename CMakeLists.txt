@@ -28,6 +28,9 @@ file(GLOB_RECURSE SOURCES
     "src/test_data/*.jpeg"
     "src/test_data/*.csv"
 )
+
+
+
 add_executable(DMPS main.cpp ${SOURCES})
 
 # AJOUT : Lier les bibliothèques Qt

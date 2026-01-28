@@ -1,4 +1,6 @@
+
 #include "ImageDisplayAdapter.hpp"
+#include "../../data/ImageData.hpp"
 #include "../../data/IData.hpp"
 #include "../../core/DataType.hpp"
 #include <QLabel>
@@ -6,137 +8,106 @@
 #include <QImage>
 #include <QVBoxLayout>
 #include <QScrollArea>
+#include <QStackedWidget>
+#include <QDebug>
 #include <iostream>
+
 
 bool ImageDisplayAdapter::canDisplay(const IData& data) const
 {
-    std::cout << "[ImageDisplayAdapter] canDisplay() appelé" << std::endl;
-    std::cout << "[ImageDisplayAdapter] Type de donnée: " << static_cast<int>(data.type()) << std::endl;
-    std::cout << "[ImageDisplayAdapter] DataType::Image vaut: " << static_cast<int>(DataType::Image) << std::endl;
+    if (data.type() != DataType::Image)
+        return false;
 
-    bool result = (data.type() == DataType::Image);
-    std::cout << "[ImageDisplayAdapter] canDisplay result: " << result << std::endl;
-
-    return result;
+    return dynamic_cast<const ImageData*>(&data) != nullptr;
 }
+
 
 void ImageDisplayAdapter::display(const IData& data, QWidget* container)
 {
-    std::cout << "=== ImageDisplayAdapter::display ===" << std::endl;
+    // Cast sécurisé
+    const ImageData& imageData = dynamic_cast<const ImageData&>(data);
 
-    if (!canDisplay(data)) {
-        std::cout << "[ImageDisplayAdapter] ERROR: canDisplay() returned false!" << std::endl;
+    // Vérifier que le container est bien un QStackedWidget
+    QStackedWidget* stacked = qobject_cast<QStackedWidget*>(container);
+    if (!stacked) {
+        qDebug() << "[DEBUG] Container is NOT a QStackedWidget";
         return;
     }
 
-    std::cout << "[ImageDisplayAdapter] Data type OK, casting to ImageData..." << std::endl;
-    const ImageData& imageData = dynamic_cast<const ImageData&>(data);
+    std::cout << "[DEBUG] ImageDisplayAdapter::display called" << std::endl;
+    std::cout << "[DEBUG] StackedWidget pages before: " << stacked->count() << std::endl;
 
-    std::cout << "[ImageDisplayAdapter] Cast réussi!" << std::endl;
-    std::cout << "[ImageDisplayAdapter] Creating layout..." << std::endl;
-
-    // Nettoyer le container
-    QLayout* oldLayout = container->layout();
-    if (oldLayout) {
-        std::cout << "[ImageDisplayAdapter] Deleting old layout" << std::endl;
-        QWidget().setLayout(oldLayout);
+    // Supprimer les anciennes pages
+    while (stacked->count() > 0) {
+        QWidget* w = stacked->widget(0);
+        stacked->removeWidget(w);
+        delete w;
     }
 
-    QVBoxLayout* layout = new QVBoxLayout(container);
+    // Créer une nouvelle page
+    QWidget* page = new QWidget(stacked);
+    QVBoxLayout* layout = new QVBoxLayout(page);
     layout->setContentsMargins(0, 0, 0, 0);
-    std::cout << "[ImageDisplayAdapter] Layout créé" << std::endl;
 
-    QScrollArea* scrollArea = new QScrollArea(container);
-    scrollArea->setWidgetResizable(true);
-    std::cout << "[ImageDisplayAdapter] ScrollArea créée" << std::endl;
+    // Créer QScrollArea pour gérer les grandes images
+    QScrollArea* scrollArea = new QScrollArea(page);
+    scrollArea->setAlignment(Qt::AlignCenter);
+    scrollArea->setWidgetResizable(false); // Important: ne pas auto-redimensionner
 
-    std::cout << "[ImageDisplayAdapter] Converting to QPixmap..." << std::endl;
+    // Créer QLabel et l'ajouter au scrollArea
     QLabel* imageLabel = createImageLabel(imageData, scrollArea);
-
-    std::cout << "[ImageDisplayAdapter] Label created, setting widget..." << std::endl;
     scrollArea->setWidget(imageLabel);
+
+    // Ajouter le scrollArea au layout (pas directement le label)
     layout->addWidget(scrollArea);
 
-    std::cout << "[ImageDisplayAdapter] Display complete!" << std::endl;
+    // Ajouter la page au stackedWidget
+    stacked->addWidget(page);
+    stacked->setCurrentWidget(page);
+
+    std::cout << "[DEBUG] StackedWidget pages after: " << stacked->count() << std::endl;
 }
 
-QLabel* ImageDisplayAdapter::createImageLabel(const ImageData& imageData, QWidget* parent)
-{
-    std::cout << "[ImageDisplayAdapter] createImageLabel() appelé" << std::endl;
-
-    QLabel* label = new QLabel(parent);
-    label->setAlignment(Qt::AlignCenter);
-    std::cout << "[ImageDisplayAdapter] QLabel créé" << std::endl;
-
-    QPixmap pixmap = convertToPixmap(imageData);
-    std::cout << "[ImageDisplayAdapter] QPixmap obtenu, taille: "
-              << pixmap.width() << "x" << pixmap.height() << std::endl;
-
-    if (pixmap.isNull()) {
-        std::cout << "[ImageDisplayAdapter] ERROR: QPixmap is NULL!" << std::endl;
-        label->setText("Error: Could not load image");
-    } else {
-        label->setPixmap(pixmap);
-        std::cout << "[ImageDisplayAdapter] Pixmap set to label" << std::endl;
-    }
-
-    return label;
-}
 
 QPixmap ImageDisplayAdapter::convertToPixmap(const ImageData& imageData)
 {
-    std::cout << "[ImageDisplayAdapter] convertToPixmap() appelé" << std::endl;
+    QImage img(
+        imageData.getWidth(),
+        imageData.getHeight(),
+        QImage::Format_RGBA8888
+        );
 
-    int width = const_cast<ImageData&>(imageData).getWidth();
-    int height = const_cast<ImageData&>(imageData).getHeight();
-    const auto& pixels = imageData.pixels();
-
-    std::cout << "[ImageDisplayAdapter] Dimensions image: " << width << "x" << height << std::endl;
-    std::cout << "[ImageDisplayAdapter] Nombre de pixels: " << pixels.size() << std::endl;
-    std::cout << "[ImageDisplayAdapter] Pixels attendus: " << (width * height) << std::endl;
-
-    if (pixels.empty()) {
-        std::cout << "[ImageDisplayAdapter] ERROR: No pixels to display!" << std::endl;
-        return QPixmap();
-    }
-
-    if (pixels.size() != static_cast<size_t>(width * height)) {
-        std::cout << "[ImageDisplayAdapter] WARNING: Pixel count mismatch!" << std::endl;
-    }
-
-    std::cout << "[ImageDisplayAdapter] Création de la QImage..." << std::endl;
-    QImage image(width, height, QImage::Format_RGBA8888);
-
-    if (image.isNull()) {
-        std::cout << "[ImageDisplayAdapter] ERROR: Could not create QImage!" << std::endl;
-        return QPixmap();
-    }
-
-    std::cout << "[ImageDisplayAdapter] Copie des pixels dans QImage..." << std::endl;
-    for (int y = 0; y < height; ++y) {
-        for (int x = 0; x < width; ++x) {
-            const Pixel& pixel = pixels[y * width + x];
-            image.setPixel(x, y, qRgba(pixel.r, pixel.g, pixel.b, pixel.a));
+    for (int y = 0; y < imageData.getHeight(); ++y) {
+        for (int x = 0; x < imageData.getWidth(); ++x) {
+            const Pixel& p = imageData.at(x, y);
+            img.setPixelColor(x, y, QColor(p.r, p.g, p.b, p.a));
         }
     }
 
-    std::cout << "[ImageDisplayAdapter] Pixels copiés, première couleur: "
-              << "R=" << (int)pixels[0].r
-              << " G=" << (int)pixels[0].g
-              << " B=" << (int)pixels[0].b
-              << " A=" << (int)pixels[0].a << std::endl;
+    QPixmap pixmap = QPixmap::fromImage(img);
+    std::cout << "[DEBUG] Pixmap size: "
+              << pixmap.width() << "x" << pixmap.height()
+              << " | isNull: " << pixmap.isNull() << std::endl;
+    return pixmap;
+}
 
-    std::cout << "[ImageDisplayAdapter] QImage créée, conversion vers QPixmap..." << std::endl;
-    QPixmap pixmap = QPixmap::fromImage(image);
 
-    std::cout << "[ImageDisplayAdapter] QPixmap size: "
-              << pixmap.width() << "x" << pixmap.height() << std::endl;
+QLabel* ImageDisplayAdapter::createImageLabel(
+    const ImageData& imageData,
+    QWidget* parent
+    ) {
+    QLabel* label = new QLabel(parent);
+    QPixmap pix = convertToPixmap(imageData);
 
-    if (pixmap.isNull()) {
-        std::cout << "[ImageDisplayAdapter] ERROR: QPixmap conversion failed!" << std::endl;
+    if (pix.isNull()) {
+        label->setText("Erreur: impossible d'afficher l'image");
+        qDebug() << "Pixmap NULL!";
     } else {
-        std::cout << "[ImageDisplayAdapter] QPixmap créé avec succès!" << std::endl;
+        label->setPixmap(pix);
     }
 
-    return pixmap;
+    label->setScaledContents(true); // Pour s'adapter à la taille du container
+    label->setAlignment(Qt::AlignCenter);
+
+    return label;
 }

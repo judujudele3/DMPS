@@ -1,3 +1,4 @@
+
 #include "TextDataLoader.hpp"
 #include "../data/TextData.hpp"
 #include <fstream>
@@ -14,7 +15,7 @@ bool TextDataLoader::supports(const std::string& extension) const
 std::string TextDataLoader::getExtension(const std::string& path) const {
     size_t pos = path.find_last_of('.');
     if (pos == std::string::npos) return "";
-    std::string ext = path.substr(pos + 1);
+    std::string ext = path.substr(pos);
     std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
     return ext;
 }
@@ -24,7 +25,7 @@ std::shared_ptr<IData> TextDataLoader::load(const std::string& path)
     std::ifstream file(path);
     if (!file.is_open())
     {
-        std::cerr << "[TextDataLoader] Impossible d'ouvrir le fichier : " << path << std::endl;
+        std::cerr << "Unable to open the file : " << path << std::endl;
         return nullptr;
     }
 
@@ -32,5 +33,8 @@ std::shared_ptr<IData> TextDataLoader::load(const std::string& path)
     buffer << file.rdbuf();
     std::string content = buffer.str();
 
+    std::cout << "[TextDataLoader] File loaded "<< std::endl;
+
+    // Adding a default format
     return std::make_shared<TextData>(content);
 }

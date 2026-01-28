@@ -5,15 +5,14 @@
 #include <iostream>
 
 bool TabularDataLoader::supports(const std::string& extension) const {
-    std::string ext = extension;
-    std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
-    return ext == ".csv" || "csv"; // pour l'instant, on supporte que CSV
+
+    return extension == ".csv" ||  extension == ".xls";
 }
 
 std::string TabularDataLoader::getExtension(const std::string& path) const {
     size_t pos = path.find_last_of('.');
     if (pos == std::string::npos) return "";
-    std::string ext = path.substr(pos + 1);
+    std::string ext = path.substr(pos );
     std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
     return ext;
 }
@@ -21,13 +20,13 @@ std::string TabularDataLoader::getExtension(const std::string& path) const {
 std::shared_ptr<IData> TabularDataLoader::load(const std::string& path) {
     std::string ext = getExtension(path);
     if (!supports(ext)) {
-        std::cerr << "Erreur: format non supporté pour " << path << std::endl;
+        std::cerr << "Error: Unsupported format for " << path << std::endl;
         return nullptr;
     }
 
     std::ifstream file(path);
     if (!file.is_open()) {
-        std::cerr << "Erreur: impossible d'ouvrir le fichier " << path << std::endl;
+        std::cerr << "Error: Unable to open the file " << path << std::endl;
         return nullptr;
     }
 

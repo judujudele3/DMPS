@@ -18,6 +18,7 @@ public:
     std::vector<ModuleExecutionResult> applyModules() override;
     std::shared_ptr<IData> getData() const override;
     std::shared_ptr<IData> loadData(const std::string& path);
+    void clearData();
     bool setActiveModules(const std::vector<SelectedModule>& selectedModules);
     std::vector<SelectedModule> getActiveModulesInfo() const;
     void clearModules();

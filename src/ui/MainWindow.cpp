@@ -6,6 +6,8 @@
 #include <QSettings>
 #include <QStyleFactory>
 #include <QActionGroup>
+#include <QDesktopServices>
+#include <QUrl>
 
 
 
@@ -18,6 +20,27 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->actionExit, &QAction::triggered, this, &MainWindow::onQuit);
     connect(ui->actionApply_Modules, &QAction::triggered, this, &MainWindow::onApplyModule);
     connect(ui->actionAbout, &QAction::triggered, this, &MainWindow::onAbout);
+    connect(ui->actionDocumentation, &QAction::triggered, this, &MainWindow::onDocumentation);
+    connect(ui->actionClose, &QAction::triggered, this, &MainWindow::onClose);
+    // Liste des actions non implémentées
+    QList<QAction*> notImplemented = {
+        ui->actionCopy,
+        ui->actionCut,
+        ui->actionFind,
+        ui->actionPaste,
+        ui->actionUndo,
+        ui->actionManage_Modules,
+        ui->actionLanguage,
+        ui->actionPreferences,
+        ui->actionToggle_Panels,
+        ui->actionZoom_In,
+        ui->actionZoom_Out
+    };
+
+    // Connexion en masse
+    for (QAction* action : notImplemented) {
+        connect(action, &QAction::triggered, this, &MainWindow::onFeatureNotImplemented);
+    }
     currentTheme_ = loadThemePreference();
     applyTheme(currentTheme_);
     setupShortcuts();
@@ -78,8 +101,24 @@ void MainWindow::on_actionOpen_triggered()
 
 
 
-void MainWindow::onQuit() {
-    close();  // ferme la fenêtre principale
+void MainWindow::onQuit()
+{
+    // Demander confirmation si des données sont chargées
+    if (m_controller && m_controller->hasData()) {
+        QMessageBox::StandardButton reply = QMessageBox::question(
+            this,
+            "Quit Application",
+            "Don't forget to save your work.\n\nWould you like to quit?",
+            QMessageBox::Cancel | QMessageBox::Yes,
+            QMessageBox::Cancel
+            );
+
+        if (reply == QMessageBox::Cancel) {
+            return;
+        }
+    }
+
+    close();  // Ferme la fenêtre principale
 }
 
 void MainWindow::onApplyModule() {
@@ -442,5 +481,55 @@ void MainWindow::setupThemeMenu()
         ui->actionLight->setChecked(true);
     } else {
         ui->actionDark->setChecked(true);
+    }
+}
+
+void MainWindow::onFeatureNotImplemented()
+{
+    QAction* action = qobject_cast<QAction*>(sender());
+    QString featureName = action ? action->text().remove('&') : "Cette fonctionnalité";
+
+    QMessageBox::information(
+        this,
+        "Fonctionnalité non implémentée",
+        featureName + "\n\nCette fonctionnalité n'est pas encore implémentée."
+        );
+}
+
+void MainWindow::onDocumentation()
+{
+    QDesktopServices::openUrl(QUrl("https://github.com/judujudele3/DMPS"));
+}
+
+void MainWindow::onClose()
+{
+    // Demander confirmation
+    if (m_controller && m_controller->hasData()) {
+        QMessageBox::StandardButton reply = QMessageBox::question(
+            this,
+            "Close File",
+            "Don't forget to save your work.\n\nWould you like to close the current file?",
+            QMessageBox::Cancel | QMessageBox::Yes,
+            QMessageBox::Cancel
+            );
+
+        if (reply == QMessageBox::Cancel) {
+            return;
+        }
+    }
+
+    // Fermer le fichier
+    if (m_controller) {
+        m_controller->closeFile();
+
+        // Vider l'affichage
+        if (ui->stackedWidget->layout()) {
+            QWidget().setLayout(ui->stackedWidget->layout());
+        }
+
+        // Ou créer un widget vide
+        QWidget* emptyWidget = new QWidget(ui->stackedWidget);
+        ui->stackedWidget->addWidget(emptyWidget);
+        ui->stackedWidget->setCurrentWidget(emptyWidget);
     }
 }

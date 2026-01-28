@@ -250,3 +250,19 @@ void Controller::saveDataAs(QWidget* parentWidget)
     }
 }
 
+void Controller::closeFile()
+{
+    std::cout << "[Controller] Fermeture du fichier..." << std::endl;
+
+    // Réinitialiser les données dans l'engine
+    if (m_engine) {
+        m_engine->clearData();
+    }
+
+    std::cout << "[Controller] Fichier fermé." << std::endl;
+}
+
+bool Controller::hasData() const
+{
+    return m_engine && m_engine->getData() != nullptr;
+}

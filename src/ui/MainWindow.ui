@@ -80,7 +80,6 @@
     <addaction name="actionZoom_In"/>
     <addaction name="actionZoom_Out"/>
     <addaction name="separator"/>
-    <addaction name="actionFullscreen"/>
     <addaction name="actionToggle_Panels"/>
    </widget>
    <widget class="QMenu" name="menuModules">

@@ -27,6 +27,8 @@ public:
     void addDisplayAdapter(std::shared_ptr<IDisplayAdapter> adapter);
     void displayCurrentData(QWidget* container);
     void saveDataAs(QWidget* parentWidget);
+    void closeFile();
+    bool hasData() const;
 
 public slots:
     void onEnableDisableModules();

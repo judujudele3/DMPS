@@ -59,6 +59,9 @@ private slots:
     void on_actionEnable_Disable_triggered(); // appelé quand on clique sur "Enable/Disable"
     void on_actionSave_Save_As_triggered();
     void resetDockLayout();
+    void onFeatureNotImplemented();
+    void onDocumentation();
+    void onClose();
 
 };
 

@@ -32,25 +32,6 @@ bool TabularDataSaver::save(const IData& data, const std::string& path) {
             out << "\n";
         }
     }
-
-
-    /*else if (ext == "json") {
-        out << "{\n  \"data\": [\n";
-        auto& rows = tabData->rows();
-        auto& header = tabData->header();
-        for (size_t r = 0; r < rows.size(); ++r) {
-            out << "    {";
-            for (size_t c = 0; c < header.size(); ++c) {
-                out << "\"" << header[c] << "\": \"" << rows[r][c] << "\"";
-                if (c + 1 < header.size()) out << ", ";
-            }
-            out << "}";
-            if (r + 1 < rows.size()) out << ",";
-            out << "\n";
-        }
-        out << "  ]\n}\n";
-    }*/
-
     else {
         std::cerr << "Error: Unsupported extension ." << ext << "\n";
         return false;

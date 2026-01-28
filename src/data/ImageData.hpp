@@ -27,7 +27,6 @@ public:
 
     int& getWidth() ;
     int& getHeight() ;
-
     ImageFormat format() const;
 
     Pixel& at(int x, int y);

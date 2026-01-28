@@ -1,80 +1,115 @@
+
 #include "TabularDisplayAdapter.hpp"
-#include "../../data/IData.hpp"
+#include "../../data/TabularData.hpp"
 #include "../../core/DataType.hpp"
+#include <QStackedWidget> //  Indispensable pour gérer les pages
 #include <QTableWidget>
 #include <QHeaderView>
 #include <QVBoxLayout>
+#include <iostream>
 
 bool TabularDisplayAdapter::canDisplay(const IData& data) const
 {
-    return data.type() == DataType::Tabular;
+    // On vérifie le type enum et on s'assure que le cast est possible
+    return data.type() == DataType::Tabular &&
+           dynamic_cast<const TabularData*>(&data) != nullptr;
 }
 
 void TabularDisplayAdapter::display(const IData& data, QWidget* container)
 {
-    if (!canDisplay(data)) {
+    // 1. Cast sécurisé des données
+    const TabularData* tabularDataPtr = dynamic_cast<const TabularData*>(&data);
+    if (!tabularDataPtr) return;
+
+    // 2. Récupérer le QStackedWidget
+    QStackedWidget* stacked = qobject_cast<QStackedWidget*>(container);
+    if (!stacked) {
+        std::cerr << "[TabularDisplayAdapter] Erreur : Container n'est pas un QStackedWidget" << std::endl;
         return;
     }
 
-    const TabularData& tabularData = dynamic_cast<const TabularData&>(data);
+    std::cout << "[TabularDisplayAdapter] Nettoyage et affichage du tableau..." << std::endl;
 
-    // Nettoyer le container
-    QLayout* oldLayout = container->layout();
-    if (oldLayout) {
-        QWidget().setLayout(oldLayout);
+
+    // NETTOYAGE
+    // On supprime les anciennes pages
+    while (stacked->count() > 0) {
+        QWidget* w = stacked->widget(0);
+        stacked->removeWidget(w);
+        delete w;
     }
 
-    // Créer un layout vertical
-    QVBoxLayout* layout = new QVBoxLayout(container);
-    layout->setContentsMargins(0, 0, 0, 0);
+    // CRÉER UNE NOUVELLE PAGE
+    QWidget* page = new QWidget(stacked);
+    QVBoxLayout* layout = new QVBoxLayout(page);
+    layout->setContentsMargins(0, 0, 0, 0); // Plein écran dans la zone
 
-    // Créer le tableau
-    QTableWidget* table = createTableWidget(tabularData, container);
+    //  CRÉER ET AJOUTER LE TABLEAU
+    // On passe 'page' comme parent, pas 'container'
+    QTableWidget* table = createTableWidget(*tabularDataPtr, page);
+
     layout->addWidget(table);
+
+
+    // FINALISATION
+    stacked->addWidget(page);
+    stacked->setCurrentWidget(page);
 }
 
 QTableWidget* TabularDisplayAdapter::createTableWidget(const TabularData& tabularData, QWidget* parent)
 {
     QTableWidget* table = new QTableWidget(parent);
 
-    // Configuration du tableau
-    table->setEditTriggers(QAbstractItemView::NoEditTriggers);  // Read-only
-    table->setSelectionBehavior(QAbstractItemView::SelectRows);
-    table->setAlternatingRowColors(true);
+    // Configuration du tableau (Style et Comportement)
+    table->setEditTriggers(QAbstractItemView::NoEditTriggers);  // Lecture seule
+    table->setSelectionBehavior(QAbstractItemView::SelectRows); // Sélection par ligne
+    table->setAlternatingRowColors(true);                       // Une ligne sur deux grise
+    table->setShowGrid(true);
 
-    // Ajuster les colonnes automatiquement
-    table->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-    table->horizontalHeader()->setStretchLastSection(true);
-
-    // Peupler le tableau
+    // Peupler le tableau avec les données
     populateTable(table, tabularData);
+
+    // Ajustement visuel (à faire APRÈS le remplissage pour bien calculer les tailles)
+    table->resizeColumnsToContents();
+    table->horizontalHeader()->setStretchLastSection(true);
 
     return table;
 }
 
 void TabularDisplayAdapter::populateTable(QTableWidget* table, const TabularData& tabularData)
 {
+    // Vérifiez si vos méthodes s'appellent header()/rows() ou getHeader()/getRows() dans TabularData.hpp
     const auto& header = tabularData.header();
     const auto& rows = tabularData.rows();
 
-    // Définir le nombre de lignes et colonnes
+    // Définir la taille du tableau
     table->setRowCount(static_cast<int>(rows.size()));
     table->setColumnCount(static_cast<int>(header.size()));
 
-    // Définir les headers
+    // Définir les titres des colonnes
     QStringList headerLabels;
     for (const auto& col : header) {
         headerLabels << QString::fromStdString(col);
     }
     table->setHorizontalHeaderLabels(headerLabels);
 
-    // Remplir les données
+    // Remplir les cellules
     for (size_t row = 0; row < rows.size(); ++row) {
         for (size_t col = 0; col < rows[row].size(); ++col) {
-            QTableWidgetItem* item = new QTableWidgetItem(
-                QString::fromStdString(rows[row][col])
-                );
-            table->setItem(static_cast<int>(row), static_cast<int>(col), item);
+            // Sécurité pour éviter le crash si une ligne est plus courte
+            if (col < rows[row].size()) {
+                QTableWidgetItem* item = new QTableWidgetItem(
+                    QString::fromStdString(rows[row][col])
+                    );
+                item->setTextAlignment(Qt::AlignCenter); // Optionnel : centrer le texte
+                table->setItem(static_cast<int>(row), static_cast<int>(col), item);
+            }
         }
     }
 }
+
+
+
+
+
+

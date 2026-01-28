@@ -3,16 +3,26 @@
 #include "../dataLoader/TextDataLoader.hpp"
 #include "../dataLoader/ImageDataLoader.hpp"
 #include "../dataLoader/TabularDataLoader.hpp"
+#include "../DataSaver/ImageDataSaver.hpp"
+#include "../DataSaver/TabularDataSaver.hpp"
+#include "../DataSaver/TextDataSaver.hpp"
 
 Engine::Engine()
     : m_loaderManager(std::make_unique<DataLoaderManager>())
-    , m_moduleManager(std::make_unique<ModuleManager>())
+     ,m_moduleManager(std::make_unique<ModuleManager>())
+     ,m_saveManager(std::make_unique<DataSaveManager>())
 {
-    // Enregistrer les loaders disponibles
+    // Text
     m_loaderManager->addLoader(std::make_shared<TextDataLoader>());
-    m_loaderManager->addLoader(std::make_shared<TabularDataLoader>());
+    // Image
     m_loaderManager->addLoader(std::make_shared<ImageDataLoader>());
-    // ... autres loaders
+    // Tabular
+    m_loaderManager->addLoader(std::make_shared<TabularDataLoader>());
+
+
+    m_saveManager->registerSaver(std::make_shared<TextDataSaver>());
+    m_saveManager->registerSaver(std::make_shared<ImageDataSaver>());
+    m_saveManager->registerSaver(std::make_shared<TabularDataSaver>());
 }
 
 void Engine::setData(std::shared_ptr<IData> data) {
@@ -149,4 +159,39 @@ std::shared_ptr<IData> Engine::loadData(const std::string& path)
         std::cout << "[Engine] Données chargées avec succès." << std::endl;
     }
     return data;
+}
+
+
+bool Engine::saveData(const std::string& path) const
+{
+    if (!m_data) {
+        std::cerr << "[Engine] No data to save." << std::endl;
+        return false;
+    }
+
+    std::cout << "[Engine] Saving data to: " << path << std::endl;
+
+    bool success = m_saveManager->saveData(*m_data, path);
+
+    if (success) {
+        std::cout << "[Engine] Data saved successfully." << std::endl;
+    } else {
+        std::cerr << "[Engine] Failed to save data." << std::endl;
+    }
+
+    return success;
+}
+
+std::vector<std::string> Engine::getAvailableSaveFormats() const
+{
+    if (!m_data) {
+        return {};
+    }
+
+    return m_saveManager->availableFormats(*m_data);
+}
+
+
+DataSaveManager& Engine::getSaveManager() const {
+    return *m_saveManager;
 }

@@ -12,8 +12,8 @@ enum class ErrorType {
 
 struct ModuleError {
     ErrorType type;
-    std::string code;     // identifiant unique de l'erreur
-    std::string message;  // message lisible par l'utilisateur
+    std::string code;     // Unique error identifier
+    std::string message;  // Unique error ID
 };
 
 #endif // MODULEERROR_HPP

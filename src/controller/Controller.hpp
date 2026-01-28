@@ -3,6 +3,8 @@
 
 #pragma once
 #include "../moduleManager/ModuleManager.hpp"
+#include "../ui/helpers/SaveFileDialogHelper.hpp"
+#include <QFileDialog>
 #include <string>
 #include <memory>
 #include <vector>
@@ -21,9 +23,10 @@ public:
     explicit Controller(std::shared_ptr<Engine> engine, QObject* parent = nullptr);
     // ouverture de fichier : le controller reçoit le path et demande à l'engine de charger
     void openFile(const std::string &path);
-    void onApplyModules(QWidget* parentWidget);
+    void onApplyModules(MainWindow* mainWindow);
     void addDisplayAdapter(std::shared_ptr<IDisplayAdapter> adapter);
     void displayCurrentData(QWidget* container);
+    void saveDataAs(QWidget* parentWidget);
 
 public slots:
     void onEnableDisableModules();

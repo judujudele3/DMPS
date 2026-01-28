@@ -1,14 +1,36 @@
-
 #include "TextDisplayAdapter.hpp"
 #include "../../data/TextData.hpp"
 #include "../../core/DataType.hpp"
-
 #include <QStackedWidget>
 #include <QTextEdit>
 #include <QVBoxLayout>
 #include <QFont>
+#include <QWheelEvent>
 #include <iostream>
 
+// Classe custom pour le zoom texte
+class ZoomableTextEdit : public QTextEdit
+{
+public:
+    ZoomableTextEdit(QWidget* parent = nullptr) : QTextEdit(parent) {}
+
+protected:
+    void wheelEvent(QWheelEvent* event) override
+    {
+        if (event->modifiers() & Qt::ControlModifier) {
+            // Ctrl + Molette = Zoom
+            if (event->angleDelta().y() > 0) {
+                zoomIn(2);
+            } else {
+                zoomOut(2);
+            }
+            event->accept();
+        } else {
+            // Molette normale = Scroll
+            QTextEdit::wheelEvent(event);
+        }
+    }
+};
 
 bool TextDisplayAdapter::canDisplay(const IData& data) const
 {
@@ -16,7 +38,6 @@ bool TextDisplayAdapter::canDisplay(const IData& data) const
     return data.type() == DataType::Text &&
            dynamic_cast<const TextData*>(&data) != nullptr;
 }
-
 
 void TextDisplayAdapter::display(const IData& data, QWidget* container)
 {
@@ -47,8 +68,8 @@ void TextDisplayAdapter::display(const IData& data, QWidget* container)
     QVBoxLayout* layout = new QVBoxLayout(page);
     layout->setContentsMargins(0, 0, 0, 0); // Pas de marges pour occuper tout l'espace
 
-    // Création du composant d'édition de texte (Lecture seule)
-    QTextEdit* textEdit = new QTextEdit(page);
+    // Création du composant d'édition de texte ZOOMABLE (Lecture seule)
+    ZoomableTextEdit* textEdit = new ZoomableTextEdit(page);
     textEdit->setReadOnly(true);
     textEdit->setText(QString::fromStdString(textDataPtr->getContent()));
 
@@ -66,4 +87,6 @@ void TextDisplayAdapter::display(const IData& data, QWidget* container)
     // AJOUTER AU STACK ET AFFICHER
     stacked->addWidget(page);
     stacked->setCurrentWidget(page);
+
+    std::cout << "[TextDisplayAdapter] Texte affiché avec zoom (Ctrl+Molette)" << std::endl;
 }

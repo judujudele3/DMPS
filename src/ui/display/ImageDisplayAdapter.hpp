@@ -6,8 +6,8 @@
 #include <memory>
 #include <QPixmap>
 
-
 class QLabel;
+class QGraphicsView;
 
 class ImageDisplayAdapter : public IDisplayAdapter
 {
@@ -19,9 +19,8 @@ public:
     void display(const IData& data, QWidget* container) override;
 
 private:
-    QLabel* createImageLabel(const ImageData& imageData, QWidget* parent);
+    QGraphicsView* createImageView(const ImageData& imageData, QWidget* parent);
     QPixmap convertToPixmap(const ImageData& imageData);
 };
-
 
 #endif // IMAGEDISPLAYADAPTER_HPP

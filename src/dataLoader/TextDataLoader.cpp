@@ -5,11 +5,20 @@
 #include <sstream>
 #include <iostream>
 #include <algorithm>
-
+#include<string>
+#include<set>
 
 bool TextDataLoader::supports(const std::string& extension) const
 {
-    return extension == ".txt";
+    static const std::set<std::string> supportedExtensions = {
+        ".txt", ".md", ".log",
+        ".cpp", ".hpp", ".h", ".c",
+        ".java", ".py", ".js", ".html", ".css",
+        ".json", ".xml", ".yaml", ".yml",
+        ".ini", ".cfg", ".conf"
+    };
+
+    return supportedExtensions.find(extension) != supportedExtensions.end();
 }
 
 std::string TextDataLoader::getExtension(const std::string& path) const {

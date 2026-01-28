@@ -7,31 +7,62 @@ std::string TabularFilterNumericColumnsModule::getName() const {
 
 ModuleResult TabularFilterNumericColumnsModule::apply(IData& data) {
     ModuleResult res;
+
     if (data.type() != DataType::Tabular) {
-        res.addError(ErrorType::Error, "INVALID_DATA_TYPE", "TabularFilterNumericColumnsModule expects TabularData.");
+        res.addError(ErrorType::Error,
+                     "INVALID_DATA_TYPE",
+                     "TabularFilterNumericColumnsModule expects TabularData.");
         return res;
     }
 
     TabularData& table = dynamic_cast<TabularData&>(data);
-    std::vector<std::string> numericCols;
 
-    for (const auto& col : table.header()) {
+    const auto& header = table.header();
+    auto& rows = table.rows();   // 🔴 NON const (important)
+
+    std::vector<std::string> newHeader;
+    std::vector<int> numericIndices;
+
+    for (size_t c = 0; c < header.size(); ++c) {
         bool isNumeric = true;
-        int idx = table.columnIndex(col);
-        for (const auto& row : table.rows()) {
-            const std::string& val = row[idx];
+
+        for (const auto& row : rows) {
+            const std::string& val = row[c];
             if (!val.empty()) {
-                try { std::stod(val); } catch(...) { isNumeric = false; break; }
+                try {
+                    std::stod(val);
+                } catch (...) {
+                    isNumeric = false;
+                    break;
+                }
             }
         }
-        if (isNumeric) numericCols.push_back(col);
+
+        if (isNumeric) {
+            newHeader.push_back(header[c]);
+            numericIndices.push_back(static_cast<int>(c));
+        }
     }
 
-    table.setHeader(numericCols); // ne garde que les colonnes numériques
-    res.message = "Kept " + std::to_string(numericCols.size()) + " numeric columns.";
+    std::vector<std::vector<std::string>> newRows;
+    newRows.reserve(rows.size());
+
+    for (const auto& row : rows) {
+        std::vector<std::string> newRow;
+        newRow.reserve(numericIndices.size());
+
+        for (int idx : numericIndices) {
+            newRow.push_back(row[idx]);
+        }
+        newRows.push_back(std::move(newRow));
+    }
+
+    table.setHeader(newHeader);
+    rows = std::move(newRows);
+
+    res.message = "Kept " + std::to_string(newHeader.size()) + " numeric columns.";
     return res;
 }
-
 
 std::vector<ModuleParameter> TabularFilterNumericColumnsModule::getParameterDescriptors() {
     return {};
